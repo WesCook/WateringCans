@@ -4,9 +4,8 @@ Standalone and customizable watering cans, originally from Extra Utilities.
 Please note this is a working document, and no features are final.
 
 ## Features
-Different cans affect hydration speed, storage capacity, and durability.
-Tiers may affect size of hydrated land.
-Config to only work on plants, or all tiles.
+Different watering cans affect hydration speed, storage capacity, and durability.  
+Fully configurable.  Disable any features or tweak balance.
 
 Watering tiles will:
 * Speed up growth ticks
@@ -15,10 +14,10 @@ Watering tiles will:
 * Sprays water particles
 
 ## Tiers
-Stone - Poor traits, very affordable
-Iron - Jack of all trades, master of none
-Gold - Very fast hydration, very low durability
-Obsidian - No durability bar, slightly slower than iron
+* Stone - Poor traits, very affordable
+* Iron - Jack of all trades, master of none
+* Gold - Very fast hydration, very low durability
+* Obsidian - No durability bar, slightly slower than iron
 
 ## Costs for use (configurable)
 * Durability
