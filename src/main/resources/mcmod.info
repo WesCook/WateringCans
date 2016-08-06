@@ -1,0 +1,16 @@
+[
+{
+  "modid": "wateringcans",
+  "name": "Watering Cans",
+  "description": "Wonderful watering cans!",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["SquareWheel"],
+  "credits": "RWTema and ExtraUtilities for the original.",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
