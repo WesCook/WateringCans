@@ -1,2 +1,5 @@
 # Item Names
-item.wateringcan.name=Watering Can
+item.wateringcans.watering_can.name=Watering Can
+
+# Fluids
+fluid.growth_solution=Growth Solution

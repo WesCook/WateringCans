@@ -1,7 +1,7 @@
 {
   "parent": "builtin/generated",
   "textures": {
-	"layer0": "wateringcans:items/wateringcan"
+	"layer0": "wateringcans:items/watering_can"
   },
   "display": {
 	"thirdperson": {
