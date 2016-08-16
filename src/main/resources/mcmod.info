@@ -5,10 +5,10 @@
   "description": "Wonderful watering cans!",
   "version": "${version}",
   "mcversion": "${mcversion}",
-  "url": "",
+  "url": "http://wescook.ca/",
   "updateUrl": "",
-  "authorList": ["SquareWheel"],
-  "credits": "RWTema and ExtraUtilities for the original.",
+  "authorList": ["Wes Cook"],
+  "credits": "Thanks to RWTema and ExtraUtilities for the original watering can.",
   "logoFile": "",
   "screenshots": [],
   "dependencies": []

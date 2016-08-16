@@ -1,13 +1,16 @@
 package ca.wescook.wateringcans.items;
 
+import ca.wescook.wateringcans.WateringCans;
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.*;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
@@ -21,7 +24,7 @@ import static java.util.Arrays.asList;
 class ItemWateringCan extends Item {
 	ItemWateringCan() {
 		setRegistryName("watering_can");
-		setUnlocalizedName("wateringcans.watering_can");
+		setUnlocalizedName(WateringCans.MODID + ".watering_can");
 		GameRegistry.register(this);
 		renderModel();
 	}
@@ -45,16 +48,15 @@ class ItemWateringCan extends Item {
 		else {
 			// If a block is found (includes fluids)
 			if (raytraceresult.typeOfHit == RayTraceResult.Type.BLOCK) {
-				// Get block position from ray trace
-				BlockPos blockpos = raytraceresult.getBlockPos();
 
 				// Collect information about block
-				Block selectedBlock = worldIn.getBlockState(blockpos).getBlock(); // Get block
+				BlockPos blockpos = raytraceresult.getBlockPos(); // Get block position from ray trace
+				Block selectedBlock = worldIn.getBlockState(blockpos).getBlock(); // Get block object
 				String blockNameRaw = selectedBlock.getUnlocalizedName(); // Get block name
 				String blockName = blockNameRaw.substring(5); // Clean .tile prefix
 
 				// Make a list of valid blocks
-				String[] validBlocks = new String[]{"water", "wateringcans:growth_solution_block"};
+				String[] validBlocks = new String[]{"water", WateringCans.MODID + ":growth_solution_block"};
 
 				// If found block is in list
 				if (asList(validBlocks).contains(blockName)) {
@@ -66,7 +68,7 @@ class ItemWateringCan extends Item {
 						System.out.println("Water");
 					}
 					// If growth solution
-					else if (blockName.equals("wateringcans:growth_solution_block")) {
+					else if (blockName.equals(WateringCans.MODID + ":growth_solution_block")) {
 						System.out.println("Growth solution");
 					}
 				}

@@ -12,9 +12,9 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 @Mod(modid = WateringCans.MODID, version = WateringCans.VERSION)
 public class WateringCans {
 	// Constants
-	static final String MODID = "wateringcans";
-	static final String MODNAME = "Watering Cans";
-	static final String VERSION = "1.0";
+	public static final String MODID = "wateringcans";
+	public static final String MODNAME = "Watering Cans";
+	public static final String VERSION = "1.0";
 
 	// Create instance of proxy
 	// This will vary depending on if the client or server is running
