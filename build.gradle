@@ -18,7 +18,7 @@ group= "ca.wescook.wateringcans"
 archivesBaseName = "wateringcans"
 
 minecraft {
-	version = "1.10.2-12.18.1.2065"
+	version = "1.10.2-12.18.1.2092"
 	runDir = "run"
 	mappings = "snapshot_20160518"
 }

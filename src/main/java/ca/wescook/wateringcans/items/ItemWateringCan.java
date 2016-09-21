@@ -3,6 +3,7 @@ package ca.wescook.wateringcans.items;
 import ca.wescook.wateringcans.WateringCans;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
@@ -26,6 +27,7 @@ class ItemWateringCan extends Item {
 		setRegistryName("watering_can");
 		setUnlocalizedName(WateringCans.MODID + ".watering_can");
 		GameRegistry.register(this);
+		setCreativeTab(CreativeTabs.TOOLS);
 		renderModel();
 	}
 
