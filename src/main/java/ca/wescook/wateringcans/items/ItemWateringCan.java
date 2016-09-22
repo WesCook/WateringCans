@@ -20,7 +20,6 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import static java.lang.Math.floor;
 import static java.util.Arrays.asList;
 import static net.minecraft.block.BlockFarmland.MOISTURE;
 
@@ -66,18 +65,24 @@ class ItemWateringCan extends Item {
 				String blockNameRaw = blockObj.getUnlocalizedName(); // Get block name
 				String blockName = blockNameRaw.substring(5); // Clean .tile prefix
 
+				// Check for/create NBT tag
+				NBTTagCompound nbtCompound = itemStackIn.getTagCompound(); // Check if exists
+				if (nbtCompound == null) // If not
+					nbtCompound = new NBTTagCompound(); // Create new compound
+				itemStackIn.setTagCompound(nbtCompound); // Attach to itemstack
+
 				// If found block is in fluid list, refill watering can
 				if (asList(validBlocks).contains(blockName))
-					refillWateringCan(worldIn, playerIn, itemStackIn, blockName, blockPos);
+					refillWateringCan(worldIn, playerIn, itemStackIn, nbtCompound, blockName, blockPos);
 				else // Water that block
-					commenceWatering(worldIn, rayTraceVector, blockPos);
+					commenceWatering(worldIn, nbtCompound, rayTraceVector, blockPos);
 			}
 
 			return new ActionResult(EnumActionResult.PASS, itemStackIn);
 		}
 	}
 
-	private void refillWateringCan(World worldIn, EntityPlayer playerIn, ItemStack itemStackIn, String blockName, BlockPos blockPos) {
+	private void refillWateringCan(World worldIn, EntityPlayer playerIn, ItemStack itemStackIn, NBTTagCompound nbtCompound, String blockName, BlockPos blockPos) {
 		worldIn.playSound(playerIn, playerIn.posX, playerIn.posY, playerIn.posZ, SoundEvents.ITEM_BOTTLE_FILL, SoundCategory.NEUTRAL, 1.0F, 1.0F); // Play sound
 		worldIn.destroyBlock(blockPos, false); // Destroy block
 
@@ -85,44 +90,56 @@ class ItemWateringCan extends Item {
 		for (int i=0; i<10; i++)
 			worldIn.spawnParticle(EnumParticleTypes.WATER_BUBBLE, blockPos.getX() + 0.5 + (worldIn.rand.nextGaussian() * 0.3D), blockPos.getY() + 1, blockPos.getZ() + 0.5 + (worldIn.rand.nextGaussian() * 0.3D), 0.0D, 0.0D, 0.0D);
 
-		// Check for/create NBT tag
-		NBTTagCompound nbtCompound = itemStackIn.getTagCompound(); // Check if exists
-		if (nbtCompound == null) // If not
-			nbtCompound = new NBTTagCompound(); // Create new compound
-
 		// Assign fluid based on block
 		if (blockName.equals("water"))
 			nbtCompound.setString("fluid", "water");
 		else if (blockName.equals(WateringCans.MODID + ":growth_solution_block"))
 			nbtCompound.setString("fluid", "growth_solution");
 
-		nbtCompound.setByte("amount", (byte) 127); // Refill watering can
-		itemStackIn.setTagCompound(nbtCompound); // Attach to itemstack
+		// Refill watering can
+		nbtCompound.setShort("amount", (short) 500);
 	}
 
-	private void commenceWatering(World worldIn, Vec3d rayTraceVector, BlockPos blockPos) {
-		// Create water particles
-		// TODO: Color according to fluid type
-		for (int i=0; i<25; i++)
-			worldIn.spawnParticle(EnumParticleTypes.WATER_SPLASH, rayTraceVector.xCoord + (worldIn.rand.nextGaussian() * 0.18D), rayTraceVector.yCoord, rayTraceVector.zCoord + (worldIn.rand.nextGaussian() * 0.18D), 0.0D, 0.0D, 0.0D);
+	private void commenceWatering(World worldIn, NBTTagCompound nbtCompound, Vec3d rayTraceVector, BlockPos blockPos) {
+		short amountRemaining = nbtCompound.getShort("amount");
 
-		int reach = 3; // Total grid size to water
-		int halfReach = (int) Math.floor(reach / 2); // Used to calculate offset in each direction
+		// If water remains in can
+		if (amountRemaining > 0) {
 
-		for (int i=0; i<reach; i++) {
-			for (int j=0; j<reach; j++) {
+			// Create water particles
+			for (int i=0; i<25; i++)
+				// TODO: Color according to fluid type
+				worldIn.spawnParticle(EnumParticleTypes.WATER_SPLASH, rayTraceVector.xCoord + (worldIn.rand.nextGaussian() * 0.18D), rayTraceVector.yCoord, rayTraceVector.zCoord + (worldIn.rand.nextGaussian() * 0.18D), 0.0D, 0.0D, 0.0D);
 
-				// Create new block to affect
-				BlockPos tempBlockPos = blockPos.add(i - halfReach, 0, j - halfReach); // Offset to center grid on selected block
-				Block tempBlockObj = worldIn.getBlockState(tempBlockPos).getBlock(); // If block
+			// Iterate through total reach
+			int reach = 3; // Total grid size to water
+			int halfReach = (int) Math.floor(reach / 2); // Used to calculate offset in each direction
 
-				// Moisten soil
-				if (tempBlockObj.getUnlocalizedName().equals("tile.farmland")) // Is farmland
-					worldIn.setBlockState(tempBlockPos, Blocks.FARMLAND.getDefaultState().withProperty(MOISTURE, 7)); // Moisten it
+			for (int i=0; i<reach; i++) {
+				for (int j=0; j<reach; j++) {
 
-				// Trigger tick updates
-				if (!tempBlockObj.getUnlocalizedName().equals("tile.farmland")) // To avoid immediately untilling farmland
-					worldIn.updateBlockTick(tempBlockPos, tempBlockObj, 10, 0);
+					// Create new block to affect
+					BlockPos tempBlockPos = blockPos.add(i - halfReach, 0, j - halfReach); // Offset to center grid on selected block
+					Block tempBlockObj = worldIn.getBlockState(tempBlockPos).getBlock(); // If block
+
+					// Moisten soil
+					if (tempBlockObj.getUnlocalizedName().equals("tile.farmland")) // Is farmland
+						worldIn.setBlockState(tempBlockPos, Blocks.FARMLAND.getDefaultState().withProperty(MOISTURE, 7)); // Moisten it
+
+					// Trigger tick updates
+					if (!tempBlockObj.getUnlocalizedName().equals("tile.farmland")) { // To avoid immediately untilling farmland
+						// Update tick speed based on fluid used
+						if (nbtCompound.getString("fluid").equals("water")) // Water
+							worldIn.updateBlockTick(tempBlockPos, tempBlockObj, 23, 0);
+						else if (nbtCompound.getString("fluid").equals("growth_solution")) // Growth Solution
+							worldIn.updateBlockTick(tempBlockPos, tempBlockObj, 4, 0);
+					}
+
+					// Decrease fluid amount
+					// TODO: See if NBT can be updated without resetting held item
+					if (amountRemaining > 0)
+						nbtCompound.setShort("amount", (short) (amountRemaining - 1));
+				}
 			}
 		}
 	}
