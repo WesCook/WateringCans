@@ -24,6 +24,7 @@ import static java.util.Arrays.asList;
 import static net.minecraft.block.BlockFarmland.MOISTURE;
 
 class ItemWateringCan extends Item {
+
 	ItemWateringCan() {
 		setRegistryName("watering_can");
 		setUnlocalizedName(WateringCans.MODID + ".watering_can");
@@ -91,6 +92,7 @@ class ItemWateringCan extends Item {
 			worldIn.spawnParticle(EnumParticleTypes.WATER_BUBBLE, blockPos.getX() + 0.5 + (worldIn.rand.nextGaussian() * 0.3D), blockPos.getY() + 1, blockPos.getZ() + 0.5 + (worldIn.rand.nextGaussian() * 0.3D), 0.0D, 0.0D, 0.0D);
 
 		// Assign fluid based on block
+		// TODO: Add tooltips for fluid/amount
 		if (blockName.equals("water"))
 			nbtCompound.setString("fluid", "water");
 		else if (blockName.equals(WateringCans.MODID + ":growth_solution_block"))
@@ -120,10 +122,10 @@ class ItemWateringCan extends Item {
 
 					// Create new block to affect
 					BlockPos tempBlockPos = blockPos.add(i - halfReach, 0, j - halfReach); // Offset to center grid on selected block
-					Block tempBlockObj = worldIn.getBlockState(tempBlockPos).getBlock(); // If block
+					Block tempBlockObj = worldIn.getBlockState(tempBlockPos).getBlock();
 
 					// Moisten soil
-					if (tempBlockObj.getUnlocalizedName().equals("tile.farmland")) // Is farmland
+					if (tempBlockObj.getUnlocalizedName().equals("tile.farmland")) // If block is farmland
 						worldIn.setBlockState(tempBlockPos, Blocks.FARMLAND.getDefaultState().withProperty(MOISTURE, 7)); // Moisten it
 
 					// Trigger tick updates
@@ -137,8 +139,8 @@ class ItemWateringCan extends Item {
 
 					// Decrease fluid amount
 					// TODO: See if NBT can be updated without resetting held item
-					if (amountRemaining > 0)
-						nbtCompound.setShort("amount", (short) (amountRemaining - 1));
+					//if (amountRemaining > 0)
+						//nbtCompound.setShort("amount", (short) (amountRemaining - 1));
 				}
 			}
 		}
