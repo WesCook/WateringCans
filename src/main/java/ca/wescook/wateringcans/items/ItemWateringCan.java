@@ -112,11 +112,17 @@ class ItemWateringCan extends Item {
 		for (int i=0; i<reach; i++) {
 			for (int j=0; j<reach; j++) {
 
-				// Moisten soil
+				// Create new block to affect
 				BlockPos tempBlockPos = blockPos.add(i - halfReach, 0, j - halfReach); // Offset to center grid on selected block
 				Block tempBlockObj = worldIn.getBlockState(tempBlockPos).getBlock(); // If block
+
+				// Moisten soil
 				if (tempBlockObj.getUnlocalizedName().equals("tile.farmland")) // Is farmland
 					worldIn.setBlockState(tempBlockPos, Blocks.FARMLAND.getDefaultState().withProperty(MOISTURE, 7)); // Moisten it
+
+				// Trigger tick updates
+				if (!tempBlockObj.getUnlocalizedName().equals("tile.farmland")) // To avoid immediately untilling farmland
+					worldIn.updateBlockTick(tempBlockPos, tempBlockObj, 10, 0);
 			}
 		}
 	}
