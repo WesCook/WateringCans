@@ -2,8 +2,6 @@ package ca.wescook.wateringcans.items;
 
 import ca.wescook.wateringcans.WateringCans;
 import net.minecraft.block.Block;
-import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -22,6 +20,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import static java.lang.Math.floor;
 import static java.util.Arrays.asList;
 import static net.minecraft.block.BlockFarmland.MOISTURE;
 
@@ -71,7 +70,7 @@ class ItemWateringCan extends Item {
 				if (asList(validBlocks).contains(blockName))
 					refillWateringCan(worldIn, playerIn, itemStackIn, blockName, blockPos);
 				else // Water that block
-					commenceWatering(worldIn, rayTraceVector, blockName, blockPos, blockObj);
+					commenceWatering(worldIn, rayTraceVector, blockPos);
 			}
 
 			return new ActionResult(EnumActionResult.PASS, itemStackIn);
@@ -101,13 +100,24 @@ class ItemWateringCan extends Item {
 		itemStackIn.setTagCompound(nbtCompound); // Attach to itemstack
 	}
 
-	private void commenceWatering(World worldIn, Vec3d rayTraceVector, String blockName, BlockPos blockPos, Block blockObj) {
+	private void commenceWatering(World worldIn, Vec3d rayTraceVector, BlockPos blockPos) {
 		// Create water particles
+		// TODO: Color according to fluid type
 		for (int i=0; i<25; i++)
 			worldIn.spawnParticle(EnumParticleTypes.WATER_SPLASH, rayTraceVector.xCoord + (worldIn.rand.nextGaussian() * 0.18D), rayTraceVector.yCoord, rayTraceVector.zCoord + (worldIn.rand.nextGaussian() * 0.18D), 0.0D, 0.0D, 0.0D);
 
-		// Moisten soil
-		if (blockName.equals("farmland"))
-			worldIn.setBlockState(blockPos, Blocks.FARMLAND.getDefaultState().withProperty(MOISTURE, 7));
+		int reach = 3; // Total grid size to water
+		int halfReach = (int) Math.floor(reach / 2); // Used to calculate offset in each direction
+
+		for (int i=0; i<reach; i++) {
+			for (int j=0; j<reach; j++) {
+
+				// Moisten soil
+				BlockPos tempBlockPos = blockPos.add(i - halfReach, 0, j - halfReach); // Offset to center grid on selected block
+				Block tempBlockObj = worldIn.getBlockState(tempBlockPos).getBlock(); // If block
+				if (tempBlockObj.getUnlocalizedName().equals("tile.farmland")) // Is farmland
+					worldIn.setBlockState(tempBlockPos, Blocks.FARMLAND.getDefaultState().withProperty(MOISTURE, 7)); // Moisten it
+			}
+		}
 	}
 }
