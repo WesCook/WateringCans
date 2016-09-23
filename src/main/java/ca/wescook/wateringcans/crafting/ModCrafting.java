@@ -8,7 +8,13 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class ModCrafting {
 	public static void registerCrafting() {
-		GameRegistry.addShapedRecipe(new ItemStack(ModItems.itemWateringCan), "dt ", " il", " i ", 'd', Blocks.DISPENSER, 't', Blocks.IRON_TRAPDOOR, 'i', Items.IRON_INGOT, 'l', Items.LEATHER); // Watering Can
-		GameRegistry.addRecipe(new CraftGrowthSolution()); // Growth Solution Bucket
+		// Watering Can
+		GameRegistry.addShapedRecipe(new ItemStack(ModItems.itemWateringCan), "t   ", " fl", " ii",
+			't', Blocks.IRON_TRAPDOOR,
+			'i', Items.IRON_INGOT,
+			'f', Blocks.FLOWER_POT,
+			'l', Items.LEATHER);
+		// Growth Solution Bucket
+		GameRegistry.addRecipe(new CraftGrowthSolution());
 	}
 }

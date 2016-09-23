@@ -1,7 +1,10 @@
 package ca.wescook.wateringcans.items;
 
+import ca.wescook.wateringcans.MeshDefinitions;
 import ca.wescook.wateringcans.WateringCans;
 import net.minecraft.block.Block;
+import net.minecraft.client.renderer.ItemMeshDefinition;
+import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -24,7 +27,6 @@ import static java.util.Arrays.asList;
 import static net.minecraft.block.BlockFarmland.MOISTURE;
 
 class ItemWateringCan extends Item {
-
 	ItemWateringCan() {
 		setRegistryName("watering_can");
 		setUnlocalizedName(WateringCans.MODID + ".watering_can");
@@ -36,7 +38,15 @@ class ItemWateringCan extends Item {
 
 	@SideOnly(Side.CLIENT)
 	private void renderModel() {
-		ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation(getRegistryName(), "inventory"));
+		// Metadata Approach
+		//ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation(WateringCans.MODID + ":watering_can_iron", "inventory"));
+		//ModelLoader.setCustomModelResourceLocation(this, 1, new ModelResourceLocation(WateringCans.MODID + ":watering_can_gold", "inventory"));
+		//itemStackIn.setItemDamage(1); // Set to gold
+
+		// Custom Mesh Approach
+		ModelLoader.setCustomMeshDefinition(this, new MeshDefinitions());
+		ModelBakery.registerItemVariants(this, new ModelResourceLocation(WateringCans.MODID + ":watering_can_iron", "inventory"), new ModelResourceLocation(WateringCans.MODID + ":watering_can_gold", "inventory"));
+		//nbtCompound.setString("material", "gold");
 	}
 
 	// On right click
@@ -69,8 +79,10 @@ class ItemWateringCan extends Item {
 				// Check for/create NBT tag
 				NBTTagCompound nbtCompound = itemStackIn.getTagCompound(); // Check if exists
 				if (nbtCompound == null) // If not
+				{
 					nbtCompound = new NBTTagCompound(); // Create new compound
-				itemStackIn.setTagCompound(nbtCompound); // Attach to itemstack
+					itemStackIn.setTagCompound(nbtCompound); // Attach to itemstack
+				}
 
 				// If found block is in fluid list, refill watering can
 				if (asList(validBlocks).contains(blockName))
@@ -103,9 +115,9 @@ class ItemWateringCan extends Item {
 	}
 
 	private void commenceWatering(World worldIn, NBTTagCompound nbtCompound, Vec3d rayTraceVector, BlockPos blockPos) {
-		short amountRemaining = nbtCompound.getShort("amount");
 
 		// If water remains in can
+		short amountRemaining = nbtCompound.getShort("amount");
 		if (amountRemaining > 0) {
 
 			// Create water particles
