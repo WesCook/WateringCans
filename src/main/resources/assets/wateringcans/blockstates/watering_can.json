@@ -1,0 +1,12 @@
+{
+	"forge_marker": 1,
+	"defaults": {
+		"model": "minecraft:item/generated"
+	},
+	"variants": {
+		"material": {
+			"iron": { "textures": { "layer0": "wateringcans:items/watering_can_base_iron" } },
+			"gold": { "textures": { "layer0": "wateringcans:items/watering_can_base_gold" } }
+		}
+	}
+}

@@ -1,7 +1,0 @@
-{
-	"parent": "item/generated",
-	"textures": {
-		"layer0": "wateringcans:items/watering_can_base_iron",
-		"layer1": "wateringcans:items/watering_can_petal_00"
-	}
-}

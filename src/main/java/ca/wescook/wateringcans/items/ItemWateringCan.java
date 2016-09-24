@@ -45,7 +45,7 @@ class ItemWateringCan extends Item {
 
 		// Custom Mesh Approach
 		ModelLoader.setCustomMeshDefinition(this, new MeshDefinitions());
-		ModelBakery.registerItemVariants(this, new ModelResourceLocation(WateringCans.MODID + ":watering_can_iron", "inventory"), new ModelResourceLocation(WateringCans.MODID + ":watering_can_gold", "inventory"));
+		ModelBakery.registerItemVariants(this, new ModelResourceLocation(WateringCans.MODID + ":watering_can", "material=iron"), new ModelResourceLocation(WateringCans.MODID + ":watering_can", "material=gold"));
 		//nbtCompound.setString("material", "gold");
 	}
 
