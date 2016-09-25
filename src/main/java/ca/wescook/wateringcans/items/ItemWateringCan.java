@@ -32,11 +32,10 @@ class ItemWateringCan extends Item {
 		GameRegistry.register(this);
 		setCreativeTab(CreativeTabs.TOOLS);
 		setMaxStackSize(1);
-		renderModel();
 	}
 
 	@SideOnly(Side.CLIENT)
-	private void renderModel() {
+	public void render() {
 
 		// Register item variants (once at runtime)
 		String[] materials = new String[]{"iron", "gold"};

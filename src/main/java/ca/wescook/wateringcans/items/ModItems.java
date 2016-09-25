@@ -6,4 +6,8 @@ public class ModItems {
 	public static void registerItems() {
 		itemWateringCan = new ItemWateringCan();
 	}
+
+	public static void renderItems() {
+		itemWateringCan.render();
+	}
 }

@@ -2,6 +2,7 @@ package ca.wescook.wateringcans.proxy;
 
 import ca.wescook.wateringcans.WateringCans;
 import ca.wescook.wateringcans.fluids.ModFluids;
+import ca.wescook.wateringcans.items.ModItems;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
@@ -15,6 +16,9 @@ public class ClientProxy extends CommonProxy {
 	@Override
 	public void preInit(FMLPreInitializationEvent event) {
 		super.preInit(event);
+
+		// Render Items
+		ModItems.renderItems();
 
 		// Render fluid
 		ModelLoader.setCustomStateMapper(ModFluids.blockFluidGrowthSolution, new StateMapperBase() {
