@@ -1,9 +1,20 @@
 {
 	"forge_marker": 1,
 	"defaults": {
-		"model": "minecraft:item/generated"
+		"model": "minecraft:builtin/generated"
 	},
 	"variants": {
+		"amount:": {
+			"0":  { "textures": { "layer1": "wateringcans:items/petals/watering_can_petal_empty" } },
+			"1":  { "textures": { "layer1": "wateringcans:items/petals/watering_can_petal_water_01" } },
+			"2":  { "textures": { "layer1": "wateringcans:items/petals/watering_can_petal_water_02" } },
+			"3":  { "textures": { "layer1": "wateringcans:items/petals/watering_can_petal_water_03" } },
+			"4":  { "textures": { "layer1": "wateringcans:items/petals/watering_can_petal_water_04" } },
+			"5":  { "textures": { "layer1": "wateringcans:items/petals/watering_can_petal_water_05" } },
+			"6":  { "textures": { "layer1": "wateringcans:items/petals/watering_can_petal_water_06" } },
+			"7":  { "textures": { "layer1": "wateringcans:items/petals/watering_can_petal_water_07" } },
+			"8":  { "textures": { "layer1": "wateringcans:items/petals/watering_can_petal_water_08" } }
+		},
 		"material": {
 			"iron": { "textures": { "layer0": "wateringcans:items/watering_can_base_iron" } },
 			"gold": { "textures": { "layer0": "wateringcans:items/watering_can_base_gold" } }

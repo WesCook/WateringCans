@@ -1,6 +1,5 @@
 package ca.wescook.wateringcans.items;
 
-import ca.wescook.wateringcans.MeshDefinitions;
 import ca.wescook.wateringcans.WateringCans;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.ItemMeshDefinition;
@@ -38,15 +37,40 @@ class ItemWateringCan extends Item {
 
 	@SideOnly(Side.CLIENT)
 	private void renderModel() {
-		// Metadata Approach
-		//ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation(WateringCans.MODID + ":watering_can_iron", "inventory"));
-		//ModelLoader.setCustomModelResourceLocation(this, 1, new ModelResourceLocation(WateringCans.MODID + ":watering_can_gold", "inventory"));
-		//itemStackIn.setItemDamage(1); // Set to gold
 
-		// Custom Mesh Approach
-		ModelLoader.setCustomMeshDefinition(this, new MeshDefinitions());
-		ModelBakery.registerItemVariants(this, new ModelResourceLocation(WateringCans.MODID + ":watering_can", "material=iron"), new ModelResourceLocation(WateringCans.MODID + ":watering_can", "material=gold"));
-		//nbtCompound.setString("material", "gold");
+		// Register item variants (once at runtime)
+		String[] materials = new String[]{"iron", "gold"};
+		int petalCount = 8;
+
+		// Register all possible model combinations
+		for (String material : materials) { // All materials
+			for (int i=0; i<petalCount+1; i++) { // All petal amounts
+				ModelBakery.registerItemVariants(this, new ModelResourceLocation(getRegistryName(), "amount=" + i + ",material=" + material));
+			}
+		}
+
+		// Custom Mesh Definitions (swap on the fly)
+		ModelLoader.setCustomMeshDefinition(this, new ItemMeshDefinition() {
+			@Override
+			public ModelResourceLocation getModelLocation(ItemStack itemStackIn) {
+
+				// Set material from NBT data
+				NBTTagCompound nbtCompound = itemStackIn.getTagCompound();
+				if (nbtCompound != null)
+				{
+					// Iron
+					if (nbtCompound.getString("material").equals("iron"))
+						return new ModelResourceLocation(getRegistryName(), "amount=0,material=iron");
+
+					// Gold
+					if (nbtCompound.getString("material").equals("gold"))
+						return new ModelResourceLocation(getRegistryName(), "amount=0,material=gold");
+				}
+
+				// No assigned material (eg. in creative menu), fall back to iron
+				return new ModelResourceLocation(getRegistryName(), "amount=0,material=iron");
+			}
+		});
 	}
 
 	// On right click
@@ -78,8 +102,7 @@ class ItemWateringCan extends Item {
 
 				// Check for/create NBT tag
 				NBTTagCompound nbtCompound = itemStackIn.getTagCompound(); // Check if exists
-				if (nbtCompound == null) // If not
-				{
+				if (nbtCompound == null) { // If not
 					nbtCompound = new NBTTagCompound(); // Create new compound
 					itemStackIn.setTagCompound(nbtCompound); // Attach to itemstack
 				}
@@ -98,6 +121,8 @@ class ItemWateringCan extends Item {
 	private void refillWateringCan(World worldIn, EntityPlayer playerIn, ItemStack itemStackIn, NBTTagCompound nbtCompound, String blockName, BlockPos blockPos) {
 		worldIn.playSound(playerIn, playerIn.posX, playerIn.posY, playerIn.posZ, SoundEvents.ITEM_BOTTLE_FILL, SoundCategory.NEUTRAL, 1.0F, 1.0F); // Play sound
 		worldIn.destroyBlock(blockPos, false); // Destroy block
+
+		nbtCompound.setString("material", "gold");
 
 		// Create bubbles
 		for (int i=0; i<10; i++)
