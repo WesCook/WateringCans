@@ -28,7 +28,7 @@ import static net.minecraft.block.BlockFarmland.MOISTURE;
 class ItemWateringCan extends Item {
 	ItemWateringCan() {
 		setRegistryName("watering_can");
-		setUnlocalizedName(WateringCans.MODID + ".watering_can");
+		setUnlocalizedName(getRegistryName().toString());
 		GameRegistry.register(this);
 		setCreativeTab(CreativeTabs.TOOLS);
 		setMaxStackSize(1);
@@ -39,12 +39,12 @@ class ItemWateringCan extends Item {
 
 		// Register item variants (once at runtime)
 		String[] materials = new String[]{"iron", "gold"};
-		int petalCount = 8;
+		int petalVariations = 9;
 
 		// Register all possible model combinations
 		for (String material : materials) { // All materials
-			for (int i=0; i<petalCount+1; i++) { // All petal amounts
-				ModelBakery.registerItemVariants(this, new ModelResourceLocation(getRegistryName(), "amount=" + i + ",material=" + material));
+			for (int i=0; i<petalVariations; i++) { // All petal amounts
+				ModelBakery.registerItemVariants(this, new ModelResourceLocation(getRegistryName(), "material=" + material + ",petals=" + i));
 			}
 		}
 
@@ -59,15 +59,15 @@ class ItemWateringCan extends Item {
 				{
 					// Iron
 					if (nbtCompound.getString("material").equals("iron"))
-						return new ModelResourceLocation(getRegistryName(), "amount=0,material=iron");
+						return new ModelResourceLocation(getRegistryName(), "material=iron,petals=0");
 
 					// Gold
 					if (nbtCompound.getString("material").equals("gold"))
-						return new ModelResourceLocation(getRegistryName(), "amount=0,material=gold");
+						return new ModelResourceLocation(getRegistryName(), "material=gold,petals=0");
 				}
 
 				// No assigned material (eg. in creative menu), fall back to iron
-				return new ModelResourceLocation(getRegistryName(), "amount=0,material=iron");
+				return new ModelResourceLocation(getRegistryName(), "material=iron,petals=0");
 			}
 		});
 	}

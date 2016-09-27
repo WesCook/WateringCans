@@ -4,7 +4,11 @@
 		"model": "minecraft:builtin/generated"
 	},
 	"variants": {
-		"amount:": {
+		"material": {
+			"gold": { "textures": { "layer0": "wateringcans:items/watering_can_base_gold" } },
+			"iron": { "textures": { "layer0": "wateringcans:items/watering_can_base_iron" } }
+		},
+		"petals": {
 			"0":  { "textures": { "layer1": "wateringcans:items/petals/watering_can_petal_empty" } },
 			"1":  { "textures": { "layer1": "wateringcans:items/petals/watering_can_petal_water_01" } },
 			"2":  { "textures": { "layer1": "wateringcans:items/petals/watering_can_petal_water_02" } },
@@ -14,10 +18,6 @@
 			"6":  { "textures": { "layer1": "wateringcans:items/petals/watering_can_petal_water_06" } },
 			"7":  { "textures": { "layer1": "wateringcans:items/petals/watering_can_petal_water_07" } },
 			"8":  { "textures": { "layer1": "wateringcans:items/petals/watering_can_petal_water_08" } }
-		},
-		"material": {
-			"iron": { "textures": { "layer0": "wateringcans:items/watering_can_base_iron" } },
-			"gold": { "textures": { "layer0": "wateringcans:items/watering_can_base_gold" } }
 		}
 	}
 }
