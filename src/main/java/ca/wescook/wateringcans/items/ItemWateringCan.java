@@ -178,7 +178,7 @@ class ItemWateringCan extends Item {
 					// Decrease fluid amount
 					// TODO: See if NBT can be updated without resetting held item
 					if (amountRemaining > 0)
-						nbtCompound.setShort("amount", (short) (amountRemaining - 5));
+						nbtCompound.setShort("amount", (short) (amountRemaining - 1));
 				}
 			}
 		}

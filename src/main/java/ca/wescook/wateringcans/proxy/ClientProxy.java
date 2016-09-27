@@ -21,11 +21,7 @@ public class ClientProxy extends CommonProxy {
 		ModItems.renderItems();
 
 		// Render fluid
-		ModelLoader.setCustomStateMapper(ModFluids.blockFluidGrowthSolution, new StateMapperBase() {
-			protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
-				return new ModelResourceLocation(WateringCans.MODID + ":growth_solution_block");
-			}
-		});
+		ModFluids.renderFluids();
 	}
 
 	@Override

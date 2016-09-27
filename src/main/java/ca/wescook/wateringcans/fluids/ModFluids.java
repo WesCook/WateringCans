@@ -8,4 +8,8 @@ public class ModFluids {
 		fluidGrowthSolution = new FluidGrowthSolution();
 		blockFluidGrowthSolution = new BlockFluidGrowthSolution();
 	}
+
+	public static void renderFluids() {
+		blockFluidGrowthSolution.render();
+	}
 }
