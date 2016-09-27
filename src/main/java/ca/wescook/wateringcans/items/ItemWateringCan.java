@@ -26,6 +26,11 @@ import static java.util.Arrays.asList;
 import static net.minecraft.block.BlockFarmland.MOISTURE;
 
 class ItemWateringCan extends Item {
+
+	private final String[] materials = new String[]{"iron", "gold"};
+	private final byte petalVariations = 9;
+	private final short maxAmount = 500;
+
 	ItemWateringCan() {
 		setRegistryName("watering_can");
 		setUnlocalizedName(getRegistryName().toString());
@@ -35,13 +40,8 @@ class ItemWateringCan extends Item {
 	}
 
 	@SideOnly(Side.CLIENT)
-	public void render() {
-
-		// Register item variants (once at runtime)
-		String[] materials = new String[]{"iron", "gold"};
-		int petalVariations = 9;
-
-		// Register all possible model combinations
+	void render() {
+		// Register all possible item model combinations (once at runtime)
 		for (String material : materials) { // All materials
 			for (int i=0; i<petalVariations; i++) { // All petal variations
 				ModelBakery.registerItemVariants(this, new ModelResourceLocation(getRegistryName(), "material=" + material + ",petals=" + i));
@@ -57,13 +57,17 @@ class ItemWateringCan extends Item {
 				NBTTagCompound nbtCompound = itemStackIn.getTagCompound();
 				if (nbtCompound != null)
 				{
-					// Iron
-					if (nbtCompound.getString("material").equals("iron"))
-						return new ModelResourceLocation(getRegistryName(), "material=iron,petals=0");
+					// Get NBT data
+					String material = nbtCompound.getString("material");
+					Short amount = nbtCompound.getShort("amount");
 
-					// Gold
-					if (nbtCompound.getString("material").equals("gold"))
-						return new ModelResourceLocation(getRegistryName(), "material=gold,petals=0");
+					// Calculate petals from amount
+					// Behavior: 8 petals is completely full, 0 petals is completely empty.
+					// 1-7 petals are in-between states, rounded up as a percentage of the max storage amount
+					byte petals = (byte) Math.ceil(((double) amount / (maxAmount - 1)) * (petalVariations - 1 - 1));
+
+					// Return dynamic texture location
+					return new ModelResourceLocation(getRegistryName(), "material=" + material + ",petals=" + petals);
 				}
 
 				// No assigned material (eg. in creative menu), fall back to iron
@@ -133,7 +137,7 @@ class ItemWateringCan extends Item {
 			nbtCompound.setString("fluid", "growth_solution");
 
 		// Refill watering can
-		nbtCompound.setShort("amount", (short) 500);
+		nbtCompound.setShort("amount", maxAmount);
 	}
 
 	private void commenceWatering(World worldIn, NBTTagCompound nbtCompound, Vec3d rayTraceVector, BlockPos blockPos) {
@@ -174,7 +178,7 @@ class ItemWateringCan extends Item {
 					// Decrease fluid amount
 					// TODO: See if NBT can be updated without resetting held item
 					if (amountRemaining > 0)
-						nbtCompound.setShort("amount", (short) (amountRemaining - 1));
+						nbtCompound.setShort("amount", (short) (amountRemaining - 5));
 				}
 			}
 		}
