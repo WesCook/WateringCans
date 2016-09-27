@@ -43,7 +43,7 @@ class ItemWateringCan extends Item {
 
 		// Register all possible model combinations
 		for (String material : materials) { // All materials
-			for (int i=0; i<petalVariations; i++) { // All petal amounts
+			for (int i=0; i<petalVariations; i++) { // All petal variations
 				ModelBakery.registerItemVariants(this, new ModelResourceLocation(getRegistryName(), "material=" + material + ",petals=" + i));
 			}
 		}
@@ -121,8 +121,6 @@ class ItemWateringCan extends Item {
 		worldIn.playSound(playerIn, playerIn.posX, playerIn.posY, playerIn.posZ, SoundEvents.ITEM_BOTTLE_FILL, SoundCategory.NEUTRAL, 1.0F, 1.0F); // Play sound
 		worldIn.destroyBlock(blockPos, false); // Destroy block
 
-		nbtCompound.setString("material", "gold");
-
 		// Create bubbles
 		for (int i=0; i<10; i++)
 			worldIn.spawnParticle(EnumParticleTypes.WATER_BUBBLE, blockPos.getX() + 0.5 + (worldIn.rand.nextGaussian() * 0.3D), blockPos.getY() + 1, blockPos.getZ() + 0.5 + (worldIn.rand.nextGaussian() * 0.3D), 0.0D, 0.0D, 0.0D);
@@ -175,8 +173,8 @@ class ItemWateringCan extends Item {
 
 					// Decrease fluid amount
 					// TODO: See if NBT can be updated without resetting held item
-					//if (amountRemaining > 0)
-						//nbtCompound.setShort("amount", (short) (amountRemaining - 1));
+					if (amountRemaining > 0)
+						nbtCompound.setShort("amount", (short) (amountRemaining - 1));
 				}
 			}
 		}
