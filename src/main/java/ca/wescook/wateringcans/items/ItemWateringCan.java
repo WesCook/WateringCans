@@ -27,7 +27,7 @@ import static ca.wescook.wateringcans.WateringCans.*;
 import static java.util.Arrays.asList;
 import static net.minecraft.block.BlockFarmland.MOISTURE;
 
-class ItemWateringCan extends Item {
+public class ItemWateringCan extends Item {
 	ItemWateringCan() {
 		setRegistryName("watering_can");
 		setUnlocalizedName(getRegistryName().toString());
@@ -76,8 +76,13 @@ class ItemWateringCan extends Item {
 					else
 						return new ModelResourceLocation(getRegistryName(), "material=" + material + ",petals=" + fluid + "_" + petals);
 				}
+				else {
+					// NBT isn't set, may be spawned in
+					System.out.println("Missing NBT data on watering can.  Setting default data.");
+					itemStackIn.setTagCompound(getDefaultNBT());
+				}
 
-				// No assigned material (eg. in creative menu), fall back to iron
+				// Rendering without assigned NBT data.  Return empty watering can.
 				return new ModelResourceLocation(getRegistryName(), "material=iron,petals=empty");
 			}
 		});
@@ -87,23 +92,22 @@ class ItemWateringCan extends Item {
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> list) {
 		for (String material : materials) { // Loop through materials
-			ItemStack tempItem = new ItemStack(itemIn); // Create item
-			NBTTagCompound nbtCompound = new NBTTagCompound(); // Create compound
-			nbtCompound.setString("material", material); // Assign string to compound
-			tempItem.setTagCompound(nbtCompound); // Map compound to item
+			ItemStack tempItem = new ItemStack(itemIn); // Create ItemStack
+			NBTTagCompound nbtCompound = getDefaultNBT(); // Create compound from NBT defaults
+			nbtCompound.setString("material", material); // Overwrite material tag
+			tempItem.setTagCompound(nbtCompound); // Assign tag to ItemStack
 			list.add(tempItem); // Add to creative menu
 		}
 	}
 
-	void setDefaultMaterial() {
-		// Watering can is missing material somehow
-		// Default to iron
-		// Should be set without nbtCompound existing though
-		//if (material.equals("")) {
-		//	System.out.println("Watering can missing material, setting to iron.");
-		//	nbtCompound.setString("material", "iron");
-		//	itemStackIn.setTagCompound(nbtCompound);
-		//}
+	// Apply some default NBT on item creation
+	// From crafting, spawning in, or creative menu
+	public static NBTTagCompound getDefaultNBT() {
+		NBTTagCompound nbtCompound = new NBTTagCompound();
+		nbtCompound.setString("material", "iron");
+		nbtCompound.setString("fluid", "water");
+		nbtCompound.setShort("amount", (short) 0);
+		return nbtCompound;
 	}
 
 	// On right click
