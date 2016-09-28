@@ -1,23 +1,32 @@
 {
 	"forge_marker": 1,
 	"defaults": {
-		"model": "builtin/generated"
+		"model": "builtin/generated",
+		"transform": "forge:default-item"
 	},
 	"variants": {
 		"material": {
-			"gold": { "textures": { "layer0": "wateringcans:items/watering_can_base_gold" } },
-			"iron": { "textures": { "layer0": "wateringcans:items/watering_can_base_iron" } }
+			"iron": { "textures": { "layer0": "wateringcans:items/watering_can_base_iron" } },
+			"gold": { "textures": { "layer0": "wateringcans:items/watering_can_base_gold" } }
 		},
 		"petals": {
-			"0":  { "textures": { "layer1": "wateringcans:items/petals/watering_can_petal_empty" } },
-			"1":  { "textures": { "layer1": "wateringcans:items/petals/watering_can_petal_water_01" } },
-			"2":  { "textures": { "layer1": "wateringcans:items/petals/watering_can_petal_water_02" } },
-			"3":  { "textures": { "layer1": "wateringcans:items/petals/watering_can_petal_water_03" } },
-			"4":  { "textures": { "layer1": "wateringcans:items/petals/watering_can_petal_water_04" } },
-			"5":  { "textures": { "layer1": "wateringcans:items/petals/watering_can_petal_water_05" } },
-			"6":  { "textures": { "layer1": "wateringcans:items/petals/watering_can_petal_water_06" } },
-			"7":  { "textures": { "layer1": "wateringcans:items/petals/watering_can_petal_water_07" } },
-			"8":  { "textures": { "layer1": "wateringcans:items/petals/watering_can_petal_water_08" } }
+			"empty":  { "textures": { "layer1": "wateringcans:items/petals/watering_can_petal_empty" } },
+			"water_1":  { "textures": { "layer1": "wateringcans:items/petals/watering_can_petal_water_01" } },
+			"water_2":  { "textures": { "layer1": "wateringcans:items/petals/watering_can_petal_water_02" } },
+			"water_3":  { "textures": { "layer1": "wateringcans:items/petals/watering_can_petal_water_03" } },
+			"water_4":  { "textures": { "layer1": "wateringcans:items/petals/watering_can_petal_water_04" } },
+			"water_5":  { "textures": { "layer1": "wateringcans:items/petals/watering_can_petal_water_05" } },
+			"water_6":  { "textures": { "layer1": "wateringcans:items/petals/watering_can_petal_water_06" } },
+			"water_7":  { "textures": { "layer1": "wateringcans:items/petals/watering_can_petal_water_07" } },
+			"water_8":  { "textures": { "layer1": "wateringcans:items/petals/watering_can_petal_water_08" } },
+			"growth_solution_1":  { "textures": { "layer1": "wateringcans:items/petals/watering_can_petal_gs_01" } },
+			"growth_solution_2":  { "textures": { "layer1": "wateringcans:items/petals/watering_can_petal_gs_02" } },
+			"growth_solution_3":  { "textures": { "layer1": "wateringcans:items/petals/watering_can_petal_gs_03" } },
+			"growth_solution_4":  { "textures": { "layer1": "wateringcans:items/petals/watering_can_petal_gs_04" } },
+			"growth_solution_5":  { "textures": { "layer1": "wateringcans:items/petals/watering_can_petal_gs_05" } },
+			"growth_solution_6":  { "textures": { "layer1": "wateringcans:items/petals/watering_can_petal_gs_06" } },
+			"growth_solution_7":  { "textures": { "layer1": "wateringcans:items/petals/watering_can_petal_gs_07" } },
+			"growth_solution_8":  { "textures": { "layer1": "wateringcans:items/petals/watering_can_petal_gs_08" } }
 		}
 	}
 }

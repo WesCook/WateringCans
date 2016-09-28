@@ -22,14 +22,17 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.List;
+
 import static java.util.Arrays.asList;
 import static net.minecraft.block.BlockFarmland.MOISTURE;
 
 class ItemWateringCan extends Item {
 
 	private final String[] materials = new String[]{"iron", "gold"};
+	private final String[] fluids = new String[]{"water", "growth_solution"};
 	private final byte petalVariations = 9;
-	private final short maxAmount = 500;
+	private final short fluidCapacity = 500;
 
 	ItemWateringCan() {
 		setRegistryName("watering_can");
@@ -43,8 +46,11 @@ class ItemWateringCan extends Item {
 	void render() {
 		// Register all possible item model combinations (once at runtime)
 		for (String material : materials) { // All materials
-			for (int i=0; i<petalVariations; i++) { // All petal variations
-				ModelBakery.registerItemVariants(this, new ModelResourceLocation(getRegistryName(), "material=" + material + ",petals=" + i));
+			ModelBakery.registerItemVariants(this, new ModelResourceLocation(getRegistryName(), "material=" + material + ",petals=empty")); // Register empty variant
+			for (int i=0; i<petalVariations; i++) { // Petal counts
+				for (String fluid : fluids) { // All fluids
+					ModelBakery.registerItemVariants(this, new ModelResourceLocation(getRegistryName(), "material=" + material + ",petals=" + fluid + "_" + i));
+				}
 			}
 		}
 
@@ -60,20 +66,47 @@ class ItemWateringCan extends Item {
 					// Get NBT data
 					String material = nbtCompound.getString("material");
 					Short amount = nbtCompound.getShort("amount");
+					String fluid = nbtCompound.getString("fluid");
 
 					// Calculate petals from amount
 					// Behavior: 8 petals is completely full, 0 petals is completely empty.
 					// 1-7 petals are in-between states, rounded up as a percentage of the max storage amount
-					byte petals = (byte) Math.ceil(((double) amount / (maxAmount - 1)) * (petalVariations - 1 - 1));
+					byte petals = (byte) Math.ceil(((double) amount / (fluidCapacity - 1)) * (petalVariations - 1 - 1));
 
 					// Return dynamic texture location
-					return new ModelResourceLocation(getRegistryName(), "material=" + material + ",petals=" + petals);
+					if (amount == 0)
+						return new ModelResourceLocation(getRegistryName(), "material=" + material + ",petals=empty");
+					else
+						return new ModelResourceLocation(getRegistryName(), "material=" + material + ",petals=" + fluid + "_" + petals);
 				}
 
 				// No assigned material (eg. in creative menu), fall back to iron
-				return new ModelResourceLocation(getRegistryName(), "material=iron,petals=0");
+				return new ModelResourceLocation(getRegistryName(), "material=iron,petals=empty");
 			}
 		});
+	}
+
+	// Add creative menu variants
+	@SideOnly(Side.CLIENT)
+	public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> list) {
+		for (String material : materials) { // Loop through materials
+			ItemStack tempItem = new ItemStack(itemIn); // Create item
+			NBTTagCompound nbtCompound = new NBTTagCompound(); // Create compound
+			nbtCompound.setString("material", material); // Assign string to compound
+			tempItem.setTagCompound(nbtCompound); // Map compound to item
+			list.add(tempItem); // Add to creative menu
+		}
+	}
+
+	void setDefaultMaterial() {
+		// Watering can is missing material somehow
+		// Default to iron
+		// Should be set without nbtCompound existing though
+		//if (material.equals("")) {
+		//	System.out.println("Watering can missing material, setting to iron.");
+		//	nbtCompound.setString("material", "iron");
+		//	itemStackIn.setTagCompound(nbtCompound);
+		//}
 	}
 
 	// On right click
@@ -137,7 +170,7 @@ class ItemWateringCan extends Item {
 			nbtCompound.setString("fluid", "growth_solution");
 
 		// Refill watering can
-		nbtCompound.setShort("amount", maxAmount);
+		nbtCompound.setShort("amount", fluidCapacity);
 	}
 
 	private void commenceWatering(World worldIn, NBTTagCompound nbtCompound, Vec3d rayTraceVector, BlockPos blockPos) {

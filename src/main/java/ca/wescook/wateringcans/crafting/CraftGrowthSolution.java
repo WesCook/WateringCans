@@ -8,12 +8,15 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeModContainer;
 import net.minecraftforge.fluids.UniversalBucket;
+
 import javax.annotation.Nullable;
 
 public class CraftGrowthSolution implements IRecipe {
 
 	@Override
 	public boolean matches(InventoryCrafting craftMatrix, World worldIn) {
+		// TODO: Refactor crafting handler to abstract out recipe/eliminate hardcoding
+
 		// Init
 		int waterFound = 0;
 		int bonemealFound = 0;
@@ -37,7 +40,7 @@ public class CraftGrowthSolution implements IRecipe {
 		if (waterFound == 1 && bonemealFound == 1 && !somethingElseFound)
 			return true;
 
-		return false; // No recipe found
+		return false;
 	}
 
 	@Nullable
