@@ -1,5 +1,6 @@
 package ca.wescook.wateringcans.crafting;
 
+import ca.wescook.wateringcans.WateringCans;
 import ca.wescook.wateringcans.items.ModItems;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -18,11 +19,10 @@ public class ModCrafting {
 		//////////////////
 
 		// Set up materials list and hash map
-		String[] materials = new String[]{"iron", "gold"};
 		Map<String, ItemStack> wateringCanItem = new HashMap<String, ItemStack>();
 
 		// Loop through materials to create ItemStacks for each
-		for (String material : materials) {
+		for (String material : WateringCans.materials) {
 			NBTTagCompound nbtCompound = new NBTTagCompound(); // Create compound
 			nbtCompound.setString("material", material); // Set tag material
 			ItemStack tempItem = new ItemStack(ModItems.itemWateringCan); // Create ItemStack

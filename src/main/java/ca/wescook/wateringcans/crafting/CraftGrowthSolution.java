@@ -11,7 +11,7 @@ import net.minecraftforge.fluids.UniversalBucket;
 
 import javax.annotation.Nullable;
 
-public class CraftGrowthSolution implements IRecipe {
+class CraftGrowthSolution implements IRecipe {
 
 	@Override
 	public boolean matches(InventoryCrafting craftMatrix, World worldIn) {
@@ -64,7 +64,6 @@ public class CraftGrowthSolution implements IRecipe {
 	@Override
 	public ItemStack[] getRemainingItems(InventoryCrafting craftMatrix) {
 		// Remove crafting ingredients (necessary for buckets)
-		ItemStack[] newItemStack = new ItemStack[craftMatrix.getSizeInventory()];
-		return newItemStack;
+		return new ItemStack[craftMatrix.getSizeInventory()];
 	}
 }

@@ -1,6 +1,5 @@
 package ca.wescook.wateringcans.items;
 
-import ca.wescook.wateringcans.WateringCans;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.block.model.ModelBakery;
@@ -24,16 +23,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
+import static ca.wescook.wateringcans.WateringCans.*;
 import static java.util.Arrays.asList;
 import static net.minecraft.block.BlockFarmland.MOISTURE;
 
 class ItemWateringCan extends Item {
-
-	private final String[] materials = new String[]{"iron", "gold"};
-	private final String[] fluids = new String[]{"water", "growth_solution"};
-	private final byte petalVariations = 9;
-	private final short fluidCapacity = 500;
-
 	ItemWateringCan() {
 		setRegistryName("watering_can");
 		setUnlocalizedName(getRegistryName().toString());
@@ -46,7 +40,10 @@ class ItemWateringCan extends Item {
 	void render() {
 		// Register all possible item model combinations (once at runtime)
 		for (String material : materials) { // All materials
-			ModelBakery.registerItemVariants(this, new ModelResourceLocation(getRegistryName(), "material=" + material + ",petals=empty")); // Register empty variant
+			// Register empty variant
+			ModelBakery.registerItemVariants(this, new ModelResourceLocation(getRegistryName(), "material=" + material + ",petals=empty"));
+
+			// Register filled variants
 			for (int i=0; i<petalVariations; i++) { // Petal counts
 				for (String fluid : fluids) { // All fluids
 					ModelBakery.registerItemVariants(this, new ModelResourceLocation(getRegistryName(), "material=" + material + ",petals=" + fluid + "_" + i));
@@ -114,7 +111,7 @@ class ItemWateringCan extends Item {
 	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand)
 	{
 		// List of valid fluid blocks
-		String[] validBlocks = new String[]{"water", WateringCans.MODID + ":growth_solution_block"};
+		String[] validBlocks = new String[]{"water", MODID + ":growth_solution_block"};
 
 		// Ray trace - find block we're looking at
 		RayTraceResult rayTraceResult = this.rayTrace(worldIn, playerIn, true);
@@ -155,7 +152,7 @@ class ItemWateringCan extends Item {
 	}
 
 	private void refillWateringCan(World worldIn, EntityPlayer playerIn, ItemStack itemStackIn, NBTTagCompound nbtCompound, String blockName, BlockPos blockPos) {
-		worldIn.playSound(playerIn, playerIn.posX, playerIn.posY, playerIn.posZ, SoundEvents.ITEM_BOTTLE_FILL, SoundCategory.NEUTRAL, 1.0F, 1.0F); // Play sound
+		worldIn.playSound(playerIn, playerIn.posX, playerIn.posY, playerIn.posZ, SoundEvents.ITEM_BUCKET_FILL, SoundCategory.NEUTRAL, 1.0F, 1.0F); // Play sound
 		worldIn.destroyBlock(blockPos, false); // Destroy block
 
 		// Create bubbles
@@ -166,7 +163,7 @@ class ItemWateringCan extends Item {
 		// TODO: Add tooltips for fluid/amount
 		if (blockName.equals("water"))
 			nbtCompound.setString("fluid", "water");
-		else if (blockName.equals(WateringCans.MODID + ":growth_solution_block"))
+		else if (blockName.equals(MODID + ":growth_solution_block"))
 			nbtCompound.setString("fluid", "growth_solution");
 
 		// Refill watering can

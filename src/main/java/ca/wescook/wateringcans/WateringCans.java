@@ -11,10 +11,16 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 @Mod(modid = WateringCans.MODID, version = WateringCans.VERSION)
 public class WateringCans {
-	// Constants
+	// Mod Info
 	public static final String MODID = "wateringcans";
 	public static final String MODNAME = "Watering Cans";
 	public static final String VERSION = "1.0";
+
+	// Mod Constants
+	public static final String[] materials = new String[]{"iron", "gold"};
+	public static final String[] fluids = new String[]{"water", "growth_solution"};
+	public static final byte petalVariations = 9;
+	public static final short fluidCapacity = 500;
 
 	// Create instance of proxy
 	// This will vary depending on if the client or server is running
