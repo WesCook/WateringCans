@@ -1,31 +1,26 @@
 # Watering Cans
-Standalone and customizable watering cans, originally from Extra Utilities.
 
-Please note this is a working document, and no features are final.
+Wonderful watering cans!  Help farm crops or fight fires.  Implemented as a standalone mod, originally from Extra Utilities.
 
 ## Features
-Different watering cans affect hydration speed, storage capacity, and durability.  
-Fully configurable.  Disable any features or tweak balance.
 
-Watering tiles will:
+Watering cans will:
+
 * Speed up growth ticks
-* Temporarily hydrate soil
+* Hydrate soil
 * Put out fires
-* Sprays water particles
+* Spray water particles
 
 ## Tiers
-* Stone - Poor traits, very affordable
-* Iron - Jack of all trades, master of none
-* Gold - Very fast hydration, very low durability
-* Obsidian - No durability bar, slightly slower than iron
 
-## Costs for use (configurable)
-* Durability
-* Water refill
-* Bonemeal
-* No plans for RF/Tesla
- 
+Watering cans are tiered so there is no obvious "best" choice.
+
+* Stone - Cheap to make, but only stores half a tank
+* Iron - Jack of all trades, master of none
+* Gold - Faster hydration (1.3x), but can only be filled once
+* Obsidian - Heavier to use, but offers 5x5 reach
+
 ## Notes
+
 * To create growth solution, craft bonemeal and a water bucket together.  Place the liquid in the world and use the watering can on it.
-* Watering cans are intentionally not tiered so there's an obvious "best" choice.  Growth solution however is a direct upgrade to plain water.
-* Watering cans only increase random tile updates.  They don't accelerate tick updates such as Furnace progress.
+* Watering cans only increase random tile updates.  They don't accelerate tick updates such as furnace progress.
