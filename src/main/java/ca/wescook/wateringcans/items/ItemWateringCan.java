@@ -218,11 +218,20 @@ public class ItemWateringCan extends Item {
 
 					// Trigger tick updates
 					if (!tempBlockObj.getUnlocalizedName().equals("tile.farmland")) { // To avoid immediately untilling farmland
-						// Update tick speed based on fluid used
-						if (nbtCompound.getString("fluid").equals("water")) // Water
-							worldIn.updateBlockTick(tempBlockPos, tempBlockObj, 24, 0);
-						else if (nbtCompound.getString("fluid").equals("growth_solution")) // Growth Solution
-							worldIn.updateBlockTick(tempBlockPos, tempBlockObj, 6, 0);
+						// Calculate growth speed
+						float growthSpeed = 6; // Initial speed
+
+						// Multipliers
+						if (nbtCompound.getString("fluid").equals("growth_solution"))
+							growthSpeed *= 2.5;
+						if (nbtCompound.getString("material").equals("gold"))
+							growthSpeed *= 1.5;
+
+						// Lower is actually faster, so invert
+						growthSpeed = 30 - growthSpeed;
+
+						// Do tick updates
+						worldIn.updateBlockTick(tempBlockPos, tempBlockObj, (int) growthSpeed, 0);
 					}
 				}
 			}
