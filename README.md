@@ -17,10 +17,9 @@ Watering cans are tiered so there is no obvious "best" choice.
 
 * Stone - Cheap to make, but only stores half a tank
 * Iron - Jack of all trades, master of none
-* Gold - Faster hydration (1.3x), but can only be filled once
+* Gold - Faster hydration (1.5x), but can only be filled once
 * Obsidian - Heavier to use, but offers 5x5 reach
 
-## Notes
+## Growth Solution
 
-* To create growth solution, craft bonemeal and a water bucket together.  Place the liquid in the world and use the watering can on it.
-* Watering cans only increase random tile updates.  They don't accelerate tick updates such as furnace progress.
+Growth solution offers a 2.5x efficiency increase over regular water.  Craft a water bucket with bonemeal to produce growth solution, then place in the world to pick up with your watering can.
