@@ -63,13 +63,13 @@ public class ItemWateringCan extends Item {
 				{
 					// Get NBT data
 					String material = nbtCompound.getString("material");
-					Short amount = nbtCompound.getShort("amount");
+					Short amountRemaining = nbtCompound.getShort("amount");
 					String fluid = nbtCompound.getString("fluid");
 
 					// Calculate petals from amount
 					// Behavior: 8 petals is completely full, 0 petals is completely empty.
 					// 1-7 petals are in-between states, rounded up as a percentage of the max storage amount
-					byte petals = (byte) Math.ceil(((double) amount / (fluidCapacity - 1)) * (petalVariations - 1 - 1));
+					byte petals = (byte) Math.ceil(((double) amountRemaining / (fluidCapacity - 1)) * (petalVariations - 1 - 1));
 
 					// Return dynamic texture location
 					if (petals == 0)
@@ -186,10 +186,16 @@ public class ItemWateringCan extends Item {
 				worldIn.spawnParticle(EnumParticleTypes.WATER_SPLASH, rayTraceVector.xCoord + (worldIn.rand.nextGaussian() * 0.18D), rayTraceVector.yCoord, rayTraceVector.zCoord + (worldIn.rand.nextGaussian() * 0.18D), 0.0D, 0.0D, 0.0D);
 			}
 
-			// Iterate through total reach
-			int reach = 3; // Total grid size to water
+			// Calculate watering can reach
+			int reach;
+			if (nbtCompound.getString("material").equals("obsidian")) // If obsidian, increase reach
+				reach = 5;
+			else
+				reach = 3;
+
 			int halfReach = (int) Math.floor(reach / 2); // Used to calculate offset in each direction
 
+			// Iterate through total reach
 			for (int i=0; i<reach; i++) {
 				for (int j=0; j<reach; j++) {
 
@@ -223,8 +229,12 @@ public class ItemWateringCan extends Item {
 
 			// Decrease fluid amount
 			// TODO: See if NBT can be updated without resetting held item
-			if (amountRemaining > 0)
-				nbtCompound.setShort("amount", (short) (amountRemaining - 1));
+			if (amountRemaining > 0) {
+				if (nbtCompound.getString("material").equals("stone")) // If stone
+					nbtCompound.setShort("amount", (short) (amountRemaining - 2)); // Drain quicker (simulate smaller tank)
+				else
+					nbtCompound.setShort("amount", (short) (amountRemaining - 1));
+			}
 		}
 	}
 }
