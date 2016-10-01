@@ -31,20 +31,36 @@ public class ModCrafting {
 			wateringCanItem.put(material, tempItem); // Add to map
 		}
 
+		// Stone Watering Can
+		GameRegistry.addShapedRecipe(wateringCanItem.get("stone"),
+				"T  ",
+				" FL",
+				" SS",
+				'T', Blocks.TRAPDOOR, 'F', Items.FLOWER_POT, 'L', Items.LEATHER, 'S', Blocks.COBBLESTONE
+		);
+
 		// Iron Watering Can
 		GameRegistry.addShapedRecipe(wateringCanItem.get("iron"),
-			"T  ",
-			" FL",
-			" II",
-			'T', Blocks.IRON_TRAPDOOR, 'F', Items.FLOWER_POT, 'L', Items.LEATHER, 'I', Items.IRON_INGOT
+				"T  ",
+				" FL",
+				" II",
+				'T', Blocks.IRON_TRAPDOOR, 'F', Items.FLOWER_POT, 'L', Items.LEATHER, 'I', Items.IRON_INGOT
 		);
 
 		// Gold Watering Can
 		GameRegistry.addShapedRecipe(wateringCanItem.get("gold"),
-			"T  ",
-			" FL",
-			" GG",
-			'T', Blocks.IRON_TRAPDOOR, 'F', Items.FLOWER_POT, 'L', Items.LEATHER, 'G', Items.GOLD_INGOT
+				"T  ",
+				" FL",
+				" GG",
+				'T', Blocks.IRON_TRAPDOOR, 'F', Items.FLOWER_POT, 'L', Items.LEATHER, 'G', Items.GOLD_INGOT
+		);
+
+		// Obsidian Watering Can
+		GameRegistry.addShapedRecipe(wateringCanItem.get("obsidian"),
+				"T  ",
+				" FL",
+				" OO",
+				'T', Blocks.IRON_TRAPDOOR, 'F', Items.FLOWER_POT, 'L', Items.LEATHER, 'O', Blocks.OBSIDIAN
 		);
 
 		////////////////////////////

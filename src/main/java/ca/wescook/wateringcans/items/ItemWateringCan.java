@@ -45,7 +45,7 @@ public class ItemWateringCan extends Item {
 			ModelBakery.registerItemVariants(this, new ModelResourceLocation(getRegistryName(), "material=" + material + ",petals=empty"));
 
 			// Register filled variants
-			for (int i=0; i<petalVariations; i++) { // Petal counts
+			for (int i=1; i<petalVariations; i++) { // Petal counts
 				for (String fluid : fluids) { // All fluids
 					ModelBakery.registerItemVariants(this, new ModelResourceLocation(getRegistryName(), "material=" + material + ",petals=" + fluid + "_" + i));
 				}
@@ -72,7 +72,7 @@ public class ItemWateringCan extends Item {
 					byte petals = (byte) Math.ceil(((double) amount / (fluidCapacity - 1)) * (petalVariations - 1 - 1));
 
 					// Return dynamic texture location
-					if (amount == 0)
+					if (petals == 0)
 						return new ModelResourceLocation(getRegistryName(), "material=" + material + ",petals=empty");
 					else
 						return new ModelResourceLocation(getRegistryName(), "material=" + material + ",petals=" + fluid + "_" + petals);
