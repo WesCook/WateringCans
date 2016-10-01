@@ -156,7 +156,6 @@ public class ItemWateringCan extends Item {
 	}
 
 	private void refillWateringCan(World worldIn, EntityPlayer playerIn, NBTTagCompound nbtCompound, String blockName, BlockPos blockPos) {
-
 		// If gold, grant one refill
 		if (nbtCompound.getString("material").equals("gold")) {
 			if (!nbtCompound.getBoolean("filledOnce"))
@@ -167,8 +166,11 @@ public class ItemWateringCan extends Item {
 			}
 		}
 
-		worldIn.playSound(playerIn, playerIn.posX, playerIn.posY, playerIn.posZ, SoundEvents.ITEM_BUCKET_FILL, SoundCategory.BLOCKS, 1.0F, 1.0F); // Water refill sound
-		worldIn.destroyBlock(blockPos, false); // Destroy block
+		// Water refill sound
+		worldIn.playSound(playerIn, playerIn.posX, playerIn.posY, playerIn.posZ, SoundEvents.ITEM_BUCKET_FILL, SoundCategory.BLOCKS, 1.0F, 1.0F);
+
+		// Destroy block
+		worldIn.setBlockState(blockPos, Blocks.AIR.getDefaultState());
 
 		// Create bubbles
 		for (int i=0; i<10; i++)
@@ -189,6 +191,8 @@ public class ItemWateringCan extends Item {
 		// If water remains in can
 		short amountRemaining = nbtCompound.getShort("amount");
 		if (amountRemaining > 0) {
+
+			// TODO: Slow player when using obsidian watering can
 
 			// Create water particles
 			for (int i=0; i<25; i++) {
