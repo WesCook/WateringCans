@@ -1,6 +1,7 @@
 package ca.wescook.wateringcans.items;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -146,7 +147,7 @@ public class ItemWateringCan extends Item {
 
 				// If found block is in fluid list, refill watering can
 				if (asList(validBlocks).contains(blockName))
-					refillWateringCan(worldIn, playerIn, itemStackIn, nbtCompound, blockName, blockPos);
+					refillWateringCan(worldIn, playerIn, nbtCompound, blockName, blockPos);
 				else // Water that block
 					commenceWatering(worldIn, nbtCompound, rayTraceVector, blockPos);
 			}
@@ -155,7 +156,7 @@ public class ItemWateringCan extends Item {
 		}
 	}
 
-	private void refillWateringCan(World worldIn, EntityPlayer playerIn, ItemStack itemStackIn, NBTTagCompound nbtCompound, String blockName, BlockPos blockPos) {
+	private void refillWateringCan(World worldIn, EntityPlayer playerIn, NBTTagCompound nbtCompound, String blockName, BlockPos blockPos) {
 		worldIn.playSound(playerIn, playerIn.posX, playerIn.posY, playerIn.posZ, SoundEvents.ITEM_BUCKET_FILL, SoundCategory.NEUTRAL, 1.0F, 1.0F); // Play sound
 		worldIn.destroyBlock(blockPos, false); // Destroy block
 
@@ -175,15 +176,15 @@ public class ItemWateringCan extends Item {
 	}
 
 	private void commenceWatering(World worldIn, NBTTagCompound nbtCompound, Vec3d rayTraceVector, BlockPos blockPos) {
-
 		// If water remains in can
 		short amountRemaining = nbtCompound.getShort("amount");
 		if (amountRemaining > 0) {
 
 			// Create water particles
-			for (int i=0; i<25; i++)
+			for (int i=0; i<25; i++) {
 				// TODO: Color according to fluid type
 				worldIn.spawnParticle(EnumParticleTypes.WATER_SPLASH, rayTraceVector.xCoord + (worldIn.rand.nextGaussian() * 0.18D), rayTraceVector.yCoord, rayTraceVector.zCoord + (worldIn.rand.nextGaussian() * 0.18D), 0.0D, 0.0D, 0.0D);
+			}
 
 			// Iterate through total reach
 			int reach = 3; // Total grid size to water
@@ -192,29 +193,38 @@ public class ItemWateringCan extends Item {
 			for (int i=0; i<reach; i++) {
 				for (int j=0; j<reach; j++) {
 
-					// Create new block to affect
+					// Get new block objects to affect
 					BlockPos tempBlockPos = blockPos.add(i - halfReach, 0, j - halfReach); // Offset to center grid on selected block
 					Block tempBlockObj = worldIn.getBlockState(tempBlockPos).getBlock();
 
+					// Put out fire
+					for (int k=-1; k<2; k++) { // Go down one, and up two block layers
+						if (worldIn.getBlockState(tempBlockPos.add(0, k, 0)).getBlock().getUnlocalizedName().equals("tile.fire")) { // If fire
+							worldIn.setBlockToAir(tempBlockPos.add(0, k, 0)); // Extinguish it
+						}
+					}
+
 					// Moisten soil
-					if (tempBlockObj.getUnlocalizedName().equals("tile.farmland")) // If block is farmland
-						worldIn.setBlockState(tempBlockPos, Blocks.FARMLAND.getDefaultState().withProperty(MOISTURE, 7)); // Moisten it
+					for (int k=-1; k<0; k++) { // Go down one layer
+						if (worldIn.getBlockState(tempBlockPos.add(0, k, 0)).getBlock().getUnlocalizedName().equals("tile.farmland")) // If block is farmland
+							worldIn.setBlockState(tempBlockPos.add(0, k, 0), Blocks.FARMLAND.getDefaultState().withProperty(MOISTURE, 7)); // Moisten it
+					}
 
 					// Trigger tick updates
 					if (!tempBlockObj.getUnlocalizedName().equals("tile.farmland")) { // To avoid immediately untilling farmland
 						// Update tick speed based on fluid used
 						if (nbtCompound.getString("fluid").equals("water")) // Water
-							worldIn.updateBlockTick(tempBlockPos, tempBlockObj, 23, 0);
+							worldIn.updateBlockTick(tempBlockPos, tempBlockObj, 24, 0);
 						else if (nbtCompound.getString("fluid").equals("growth_solution")) // Growth Solution
-							worldIn.updateBlockTick(tempBlockPos, tempBlockObj, 4, 0);
+							worldIn.updateBlockTick(tempBlockPos, tempBlockObj, 6, 0);
 					}
-
-					// Decrease fluid amount
-					// TODO: See if NBT can be updated without resetting held item
-					if (amountRemaining > 0)
-						nbtCompound.setShort("amount", (short) (amountRemaining - 1));
 				}
 			}
+
+			// Decrease fluid amount
+			// TODO: See if NBT can be updated without resetting held item
+			if (amountRemaining > 0)
+				nbtCompound.setShort("amount", (short) (amountRemaining - 1));
 		}
 	}
 }
