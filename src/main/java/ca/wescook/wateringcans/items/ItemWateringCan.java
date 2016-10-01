@@ -1,7 +1,6 @@
 package ca.wescook.wateringcans.items;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -149,7 +148,7 @@ public class ItemWateringCan extends Item {
 				if (asList(validBlocks).contains(blockName))
 					refillWateringCan(worldIn, playerIn, nbtCompound, blockName, blockPos);
 				else // Water that block
-					commenceWatering(worldIn, nbtCompound, rayTraceVector, blockPos);
+					commenceWatering(worldIn, playerIn, itemStackIn, nbtCompound, rayTraceVector, blockPos);
 			}
 
 			return new ActionResult(EnumActionResult.PASS, itemStackIn);
@@ -157,7 +156,18 @@ public class ItemWateringCan extends Item {
 	}
 
 	private void refillWateringCan(World worldIn, EntityPlayer playerIn, NBTTagCompound nbtCompound, String blockName, BlockPos blockPos) {
-		worldIn.playSound(playerIn, playerIn.posX, playerIn.posY, playerIn.posZ, SoundEvents.ITEM_BUCKET_FILL, SoundCategory.NEUTRAL, 1.0F, 1.0F); // Play sound
+
+		// If gold, grant one refill
+		if (nbtCompound.getString("material").equals("gold")) {
+			if (!nbtCompound.getBoolean("filledOnce"))
+				nbtCompound.setBoolean("filledOnce", true); // Set flag once and continue
+			else {
+				worldIn.playSound(playerIn, playerIn.posX, playerIn.posY, playerIn.posZ, SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.PLAYERS, 1.0F, 1.0F); // Tool break sound
+				return; // Exit method
+			}
+		}
+
+		worldIn.playSound(playerIn, playerIn.posX, playerIn.posY, playerIn.posZ, SoundEvents.ITEM_BUCKET_FILL, SoundCategory.BLOCKS, 1.0F, 1.0F); // Water refill sound
 		worldIn.destroyBlock(blockPos, false); // Destroy block
 
 		// Create bubbles
@@ -175,7 +185,7 @@ public class ItemWateringCan extends Item {
 		nbtCompound.setShort("amount", fluidCapacity);
 	}
 
-	private void commenceWatering(World worldIn, NBTTagCompound nbtCompound, Vec3d rayTraceVector, BlockPos blockPos) {
+	private void commenceWatering(World worldIn, EntityPlayer playerIn, ItemStack itemStackIn, NBTTagCompound nbtCompound, Vec3d rayTraceVector, BlockPos blockPos) {
 		// If water remains in can
 		short amountRemaining = nbtCompound.getShort("amount");
 		if (amountRemaining > 0) {
@@ -186,14 +196,18 @@ public class ItemWateringCan extends Item {
 				worldIn.spawnParticle(EnumParticleTypes.WATER_SPLASH, rayTraceVector.xCoord + (worldIn.rand.nextGaussian() * 0.18D), rayTraceVector.yCoord, rayTraceVector.zCoord + (worldIn.rand.nextGaussian() * 0.18D), 0.0D, 0.0D, 0.0D);
 			}
 
+			// Play watering sound
+			worldIn.playSound(playerIn, playerIn.posX, playerIn.posY, playerIn.posZ, SoundEvents.WEATHER_RAIN, SoundCategory.BLOCKS, 0.15F, 1.8F);
+
 			// Calculate watering can reach
 			int reach;
-			if (nbtCompound.getString("material").equals("obsidian")) // If obsidian, increase reach
-				reach = 5;
+			if (nbtCompound.getString("material").equals("obsidian"))
+				reach = 5; // If obsidian, increase reach
 			else
 				reach = 3;
 
-			int halfReach = (int) Math.floor(reach / 2); // Used to calculate offset in each direction
+			// Used to calculate offset in each direction
+			int halfReach = (int) Math.floor(reach / 2);
 
 			// Iterate through total reach
 			for (int i=0; i<reach; i++) {
@@ -207,6 +221,7 @@ public class ItemWateringCan extends Item {
 					for (int k=-1; k<2; k++) { // Go down one, and up two block layers
 						if (worldIn.getBlockState(tempBlockPos.add(0, k, 0)).getBlock().getUnlocalizedName().equals("tile.fire")) { // If fire
 							worldIn.setBlockToAir(tempBlockPos.add(0, k, 0)); // Extinguish it
+							worldIn.playSound(playerIn, playerIn.posX, playerIn.posY, playerIn.posZ, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 1.0F, 1.0F); // Fire extinguish sound
 						}
 					}
 
@@ -243,6 +258,13 @@ public class ItemWateringCan extends Item {
 					nbtCompound.setShort("amount", (short) (amountRemaining - 2)); // Drain quicker (simulate smaller tank)
 				else
 					nbtCompound.setShort("amount", (short) (amountRemaining - 1));
+			}
+		}
+		else {
+			// If gold can is empty, destroy it
+			if (nbtCompound.getString("material").equals("gold") && nbtCompound.getBoolean("filledOnce")) {
+				playerIn.inventory.setInventorySlotContents(playerIn.inventory.getSlotFor(itemStackIn), null); // Delete item
+				worldIn.playSound(playerIn, playerIn.posX, playerIn.posY, playerIn.posZ, SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.PLAYERS, 1.0F, 1.0F); // Tool break sound
 			}
 		}
 	}
