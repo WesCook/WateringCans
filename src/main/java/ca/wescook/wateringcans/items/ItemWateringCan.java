@@ -225,7 +225,7 @@ public class ItemWateringCan extends Item {
 					for (int k=-1; k<2; k++) { // Go down one, and up two block layers
 						if (worldIn.getBlockState(tempBlockPos.add(0, k, 0)).getBlock().getUnlocalizedName().equals("tile.fire")) { // If fire
 							worldIn.setBlockToAir(tempBlockPos.add(0, k, 0)); // Extinguish it
-							worldIn.playSound(playerIn, playerIn.posX, playerIn.posY, playerIn.posZ, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 1.0F, 1.0F); // Fire extinguish sound
+							worldIn.playSound(playerIn, playerIn.posX, playerIn.posY, playerIn.posZ, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.5F, 1.0F); // Fire extinguish sound
 						}
 					}
 

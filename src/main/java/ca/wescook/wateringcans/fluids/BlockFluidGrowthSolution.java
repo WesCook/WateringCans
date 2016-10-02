@@ -3,6 +3,7 @@ package ca.wescook.wateringcans.fluids;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fluids.BlockFluidClassic;
@@ -20,10 +21,6 @@ class BlockFluidGrowthSolution extends BlockFluidClassic {
 
 	@SideOnly(Side.CLIENT)
 	void render() {
-		ModelLoader.setCustomStateMapper(this, new StateMapperBase() {
-			protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
-				return new ModelResourceLocation(getRegistryName().toString());
-			}
-		});
+		ModelLoader.setCustomStateMapper(this, new StateMap.Builder().ignore(LEVEL).build());
 	}
 }
