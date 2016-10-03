@@ -1,5 +1,6 @@
 package ca.wescook.wateringcans.items;
 
+import ca.wescook.wateringcans.potions.ModPotions;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.block.model.ModelBakery;
@@ -11,6 +12,7 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -110,10 +112,29 @@ public class ItemWateringCan extends Item {
 		return nbtCompound;
 	}
 
+	// On finished item use
+	/*@Override
+	public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft) {
+		if (entityLiving instanceof EntityPlayer) { // If player
+			EntityPlayer playerIn = (EntityPlayer) entityLiving; // Get player
+			NBTTagCompound nbtCompound = stack.getTagCompound(); // Get item NBT
+
+			if (nbtCompound != null && nbtCompound.getString("material").equals("obsidian")) { // If obsidian watering can
+				playerIn.capabilities.setPlayerWalkSpeed(0.1F); // Set speed back to default
+				System.out.println("Reverting speed");
+			}
+		}
+	}*/
+
+	// Override item use duration to be able to use onItemUseFinish
+	/*@Override
+	public int getMaxItemUseDuration(ItemStack stack) {
+		return 72000;
+	}*/
+
 	// On right click
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand)
-	{
+	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
 		// List of valid fluid blocks
 		String[] validBlocks = new String[]{"water", MODID + ":growth_solution_block"};
 
@@ -121,10 +142,7 @@ public class ItemWateringCan extends Item {
 		RayTraceResult rayTraceResult = this.rayTrace(worldIn, playerIn, true);
 
 		// If sky, ignore
-		if (rayTraceResult == null) {
-			return new ActionResult(EnumActionResult.PASS, itemStackIn);
-		}
-		else {
+		if (rayTraceResult != null) {
 			// If a block is found (includes fluids)
 			if (rayTraceResult.typeOfHit == RayTraceResult.Type.BLOCK) {
 
@@ -148,11 +166,10 @@ public class ItemWateringCan extends Item {
 				if (asList(validBlocks).contains(blockName))
 					refillWateringCan(worldIn, playerIn, nbtCompound, blockName, blockPos);
 				else // Water that block
-					commenceWatering(worldIn, playerIn, itemStackIn, nbtCompound, rayTraceVector, blockPos);
+					commenceWatering(worldIn, playerIn, itemStackIn, nbtCompound, rayTraceVector, hand, blockPos);
 			}
-
-			return new ActionResult(EnumActionResult.PASS, itemStackIn);
 		}
+		return new ActionResult(EnumActionResult.PASS, itemStackIn); // PASS instead of SUCCESS so we can dual wield watering cans, aww yiss
 	}
 
 	private void refillWateringCan(World worldIn, EntityPlayer playerIn, NBTTagCompound nbtCompound, String blockName, BlockPos blockPos) {
@@ -169,8 +186,8 @@ public class ItemWateringCan extends Item {
 		// Water refill sound
 		worldIn.playSound(playerIn, playerIn.posX, playerIn.posY, playerIn.posZ, SoundEvents.ITEM_BUCKET_FILL, SoundCategory.BLOCKS, 1.0F, 1.0F);
 
-		// Destroy block
-		worldIn.setBlockState(blockPos, Blocks.AIR.getDefaultState());
+		// Destroy source block
+		worldIn.setBlockToAir(blockPos);
 
 		// Create bubbles
 		for (int i=0; i<10; i++)
@@ -187,21 +204,36 @@ public class ItemWateringCan extends Item {
 		nbtCompound.setShort("amount", fluidCapacity);
 	}
 
-	private void commenceWatering(World worldIn, EntityPlayer playerIn, ItemStack itemStackIn, NBTTagCompound nbtCompound, Vec3d rayTraceVector, BlockPos blockPos) {
+	private void commenceWatering(World worldIn, EntityPlayer playerIn, ItemStack itemStackIn, NBTTagCompound nbtCompound, Vec3d rayTraceVector, EnumHand hand, BlockPos blockPos) {
 		// If water remains in can
 		short amountRemaining = nbtCompound.getShort("amount");
 		if (amountRemaining > 0) {
 
-			// TODO: Slow player when using obsidian watering can
+			// Set item in use
+			//playerIn.setActiveHand(hand);
+
+			// Slow player
+			/*if (nbtCompound.getString("material").equals("obsidian")) {
+				if (playerIn.capabilities.getWalkSpeed() != 0.015F) {
+					playerIn.capabilities.setPlayerWalkSpeed(0.015F);
+					System.out.println("Slowing");
+				}
+			}*/
+
+			// Slow player
+			if (nbtCompound.getString("material").equals("obsidian")) {
+				playerIn.addPotionEffect(new PotionEffect(ModPotions.potionInvSlow, 4, 5, false, false)); // Slow player
+				playerIn.addPotionEffect(new PotionEffect(ModPotions.inhibitFOV, 7, 0, false, false)); // Apply secondary, slightly longer potion effect to inhibit FOV changes from slowness
+			}
+
+			// Play watering sound
+			worldIn.playSound(playerIn, playerIn.posX, playerIn.posY, playerIn.posZ, SoundEvents.WEATHER_RAIN, SoundCategory.BLOCKS, 0.12F, 1.85F);
 
 			// Create water particles
 			for (int i=0; i<25; i++) {
 				// TODO: Color according to fluid type
 				worldIn.spawnParticle(EnumParticleTypes.WATER_SPLASH, rayTraceVector.xCoord + (worldIn.rand.nextGaussian() * 0.18D), rayTraceVector.yCoord, rayTraceVector.zCoord + (worldIn.rand.nextGaussian() * 0.18D), 0.0D, 0.0D, 0.0D);
 			}
-
-			// Play watering sound
-			worldIn.playSound(playerIn, playerIn.posX, playerIn.posY, playerIn.posZ, SoundEvents.WEATHER_RAIN, SoundCategory.BLOCKS, 0.15F, 1.8F);
 
 			// Calculate watering can reach
 			int reach;

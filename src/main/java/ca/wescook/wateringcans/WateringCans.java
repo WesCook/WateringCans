@@ -9,7 +9,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
-@Mod(modid = WateringCans.MODID, version = WateringCans.VERSION)
+@Mod(modid = WateringCans.MODID, name = WateringCans.MODNAME, version = WateringCans.VERSION)
 public class WateringCans {
 	// Mod Info
 	public static final String MODID = "wateringcans";
