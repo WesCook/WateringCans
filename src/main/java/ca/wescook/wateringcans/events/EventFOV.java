@@ -24,16 +24,5 @@ public class EventFOV {
 			// Disable FOV change
 			event.setNewfov((float) (fov / ((playerSpeed / capableSpeed + 1.0) / 2.0)));
 		}
-
-		// If holding watering can, inhibit FOV changes
-		//for (EnumHand hand : EnumHand.values()) { // Iterate over hands
-		//ItemStack heldItem = player.getHeldItem(hand); // Get held ItemStack
-
-		// If watering can
-		//if (heldItem != null && heldItem.getItem().getRegistryName().toString().equals(WateringCans.MODID + ":watering_can")) {
-
-		// If can is obsidian
-		//NBTTagCompound nbtCompound = heldItem.getTagCompound(); // Get item NBT
-		//if (nbtCompound != null && nbtCompound.getString("material").equals("obsidian")) {
 	}
 }

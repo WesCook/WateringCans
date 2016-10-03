@@ -112,26 +112,6 @@ public class ItemWateringCan extends Item {
 		return nbtCompound;
 	}
 
-	// On finished item use
-	/*@Override
-	public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft) {
-		if (entityLiving instanceof EntityPlayer) { // If player
-			EntityPlayer playerIn = (EntityPlayer) entityLiving; // Get player
-			NBTTagCompound nbtCompound = stack.getTagCompound(); // Get item NBT
-
-			if (nbtCompound != null && nbtCompound.getString("material").equals("obsidian")) { // If obsidian watering can
-				playerIn.capabilities.setPlayerWalkSpeed(0.1F); // Set speed back to default
-				System.out.println("Reverting speed");
-			}
-		}
-	}*/
-
-	// Override item use duration to be able to use onItemUseFinish
-	/*@Override
-	public int getMaxItemUseDuration(ItemStack stack) {
-		return 72000;
-	}*/
-
 	// On right click
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
@@ -208,18 +188,6 @@ public class ItemWateringCan extends Item {
 		// If water remains in can
 		short amountRemaining = nbtCompound.getShort("amount");
 		if (amountRemaining > 0) {
-
-			// Set item in use
-			//playerIn.setActiveHand(hand);
-
-			// Slow player
-			/*if (nbtCompound.getString("material").equals("obsidian")) {
-				if (playerIn.capabilities.getWalkSpeed() != 0.015F) {
-					playerIn.capabilities.setPlayerWalkSpeed(0.015F);
-					System.out.println("Slowing");
-				}
-			}*/
-
 			// Slow player
 			if (nbtCompound.getString("material").equals("obsidian")) {
 				playerIn.addPotionEffect(new PotionEffect(ModPotions.potionInvSlow, 4, 5, false, false)); // Slow player
