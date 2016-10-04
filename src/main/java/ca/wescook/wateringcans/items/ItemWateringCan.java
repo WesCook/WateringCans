@@ -9,6 +9,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -22,6 +23,7 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.apache.commons.lang3.text.WordUtils;
 
 import java.util.List;
 
@@ -110,6 +112,18 @@ public class ItemWateringCan extends Item {
 		nbtCompound.setString("fluid", "water");
 		nbtCompound.setShort("amount", (short) 0);
 		return nbtCompound;
+	}
+
+	// Add material to name
+	@Override
+	public String getUnlocalizedName(ItemStack stack) {
+
+		// Assign based on material
+		NBTTagCompound natCompound = stack.getTagCompound();
+		if (natCompound != null)
+			return "item." + getRegistryName().toString() + "_" + natCompound.getString("material");
+
+		return "item." + getRegistryName().toString(); // Fall back to default
 	}
 
 	// On right click
@@ -267,7 +281,18 @@ public class ItemWateringCan extends Item {
 		else {
 			// If gold can is empty, destroy it
 			if (nbtCompound.getString("material").equals("gold") && nbtCompound.getBoolean("filledOnce")) {
-				playerIn.inventory.setInventorySlotContents(playerIn.inventory.getSlotFor(itemStackIn), null); // Delete item
+
+				// Get data
+				int slot = playerIn.inventory.getSlotFor(itemStackIn); // Get ID from itemstack (returns -1 in offhand)
+				final int handSlot = 40; // Offhand slot
+
+				if (slot == -1) { // Probably in offhand, but let's verify
+					if (playerIn.inventory.getStackInSlot(handSlot) == itemStackIn) { // Checking offhand
+						slot = handSlot; // It's in the offhand
+					}
+				}
+
+				playerIn.inventory.setInventorySlotContents(slot, null); // Delete item
 				worldIn.playSound(playerIn, playerIn.posX, playerIn.posY, playerIn.posZ, SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.PLAYERS, 1.0F, 1.0F); // Tool break sound
 			}
 		}
