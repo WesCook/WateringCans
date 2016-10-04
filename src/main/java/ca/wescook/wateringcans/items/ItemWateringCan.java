@@ -231,10 +231,9 @@ public class ItemWateringCan extends Item {
 			worldIn.playSound(playerIn, playerIn.posX, playerIn.posY, playerIn.posZ, SoundEvents.WEATHER_RAIN, SoundCategory.BLOCKS, 0.12F, 1.85F);
 
 			// Create water particles
-			for (int i=0; i<25; i++) {
-				// TODO: Color according to fluid type
+			// TODO: Color according to fluid type
+			for (int i=0; i<25; i++)
 				worldIn.spawnParticle(EnumParticleTypes.WATER_SPLASH, rayTraceVector.xCoord + (worldIn.rand.nextGaussian() * 0.18D), rayTraceVector.yCoord, rayTraceVector.zCoord + (worldIn.rand.nextGaussian() * 0.18D), 0.0D, 0.0D, 0.0D);
-			}
 
 			// Calculate watering can reach
 			int reach;
@@ -254,38 +253,38 @@ public class ItemWateringCan extends Item {
 				growthSpeed *= 1.5;
 			growthSpeed = 30 - growthSpeed; // Lower is actually faster, so invert
 
+			// Put out entity fires
+			List<EntityMob> affectedMobs = worldIn.getEntitiesWithinAABB(EntityMob.class, new AxisAlignedBB(rayTraceBlockPos.add(-halfReach, -1, -halfReach), rayTraceBlockPos.add(halfReach + 1, 2, halfReach + 1))); // Find mobs
+			for (EntityMob mob : affectedMobs) { // Loop through found mobs
+				mob.extinguish(); // Extinguish fire
+			}
+
 			// Iterate through total reach
 			for (int i=0; i<reach; i++) {
 				for (int j=0; j<reach; j++) {
-					// Put out entity fires
-					List<EntityMob> affectedMobs = worldIn.getEntitiesWithinAABB(EntityMob.class, new AxisAlignedBB(rayTraceBlockPos.add(-halfReach, -1, -halfReach), rayTraceBlockPos.add(halfReach + 1, 2, halfReach + 1))); // Find mobs
-					for (EntityMob mob : affectedMobs) { // Loop through found mobs
-						mob.extinguish(); // Extinguish fire
-					}
+					for (int k=-1; k<2; k++) { // Go down one layer, up two layers
 
-					// Go down one layer, up two layers
-					for (int k=-1; k<2; k++) {
 						// Calculate new block position from reach and current Y level
 						BlockPos newBlockPos = rayTraceBlockPos.add(i - halfReach, k, j - halfReach);
 						Block newBlockObj = worldIn.getBlockState(newBlockPos).getBlock();
 
 						// Put out block fires
-						if (newBlockObj.getUnlocalizedName().equals("tile.fire")) { // If fire
+						if (newBlockObj.getRegistryName().toString().equals("minecraft:fire")) { // If fire
 							worldIn.setBlockToAir(newBlockPos); // Extinguish it
 							worldIn.playSound(playerIn, playerIn.posX, playerIn.posY, playerIn.posZ, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.5F, 1.0F); // Fire extinguish sound
 						}
 
 						// Moisten soil/Tick Updates
-						if (newBlockObj.getUnlocalizedName().equals("tile.farmland")) // If block is farmland
+						if (newBlockObj.getRegistryName().toString().equals("minecraft:farmland")) // If farmland
 							worldIn.setBlockState(newBlockPos, Blocks.FARMLAND.getDefaultState().withProperty(MOISTURE, 7)); // Moisten it
-						else // If not farmland (to avoid immediately untilling)
+						else // If not farmland, to avoid immediately untilling
 							worldIn.updateBlockTick(newBlockPos, newBlockObj, (int) growthSpeed, 0); // Do tick updates
 					}
 				}
 			}
 
 			// Decrease fluid amount
-			if (amountRemaining > 0) {
+			if (amountRemaining > 0 && !playerIn.isCreative()) {
 				if (nbtCompound.getString("material").equals("stone")) // If stone
 					nbtCompound.setShort("amount", (short) (amountRemaining - 2)); // Drain quicker (simulate smaller tank)
 				else
@@ -301,9 +300,8 @@ public class ItemWateringCan extends Item {
 				final int handSlot = 40; // Offhand slot
 
 				if (slot == -1) { // Probably in offhand, but let's verify
-					if (playerIn.inventory.getStackInSlot(handSlot) == itemStackIn) { // Checking offhand
+					if (playerIn.inventory.getStackInSlot(handSlot) == itemStackIn) // Checking offhand
 						slot = handSlot; // It's in the offhand
-					}
 				}
 
 				playerIn.inventory.setInventorySlotContents(slot, null); // Delete item
