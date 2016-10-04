@@ -216,9 +216,10 @@ public class ItemWateringCan extends Item {
 		nbtCompound.setShort("amount", fluidCapacity);
 	}
 
-	private void commenceWatering(World worldIn, EntityPlayer playerIn, ItemStack itemStackIn, NBTTagCompound nbtCompound, Vec3d rayTraceVector, EnumHand hand, BlockPos blockPos) {
+	private void commenceWatering(World worldIn, EntityPlayer playerIn, ItemStack itemStackIn, NBTTagCompound nbtCompound, Vec3d rayTraceVector, EnumHand hand, BlockPos rayTraceBlockPos) {
 		// If water remains in can
 		short amountRemaining = nbtCompound.getShort("amount");
+
 		if (amountRemaining > 0) {
 			// Slow player
 			if (nbtCompound.getString("material").equals("obsidian")) {
@@ -245,50 +246,40 @@ public class ItemWateringCan extends Item {
 			// Used to calculate offset in each direction
 			int halfReach = (int) Math.floor(reach / 2);
 
+			// Calculate growth speed
+			float growthSpeed = 6; // Initial speed
+			if (nbtCompound.getString("fluid").equals("growth_solution")) // Fluid multiplier
+				growthSpeed *= 2.5;
+			if (nbtCompound.getString("material").equals("gold"))  // Gold can multiplier
+				growthSpeed *= 1.5;
+			growthSpeed = 30 - growthSpeed; // Lower is actually faster, so invert
+
 			// Iterate through total reach
 			for (int i=0; i<reach; i++) {
 				for (int j=0; j<reach; j++) {
+					// Put out entity fires
+					List<EntityMob> affectedMobs = worldIn.getEntitiesWithinAABB(EntityMob.class, new AxisAlignedBB(rayTraceBlockPos.add(-halfReach, -1, -halfReach), rayTraceBlockPos.add(halfReach + 1, 2, halfReach + 1))); // Find mobs
+					for (EntityMob mob : affectedMobs) { // Loop through found mobs
+						mob.extinguish(); // Extinguish fire
+					}
 
-					// Get new block objects to affect
-					BlockPos tempBlockPos = blockPos.add(i - halfReach, 0, j - halfReach); // Offset to center grid on selected block
-					Block tempBlockObj = worldIn.getBlockState(tempBlockPos).getBlock();
+					// Go down one layer, up two layers
+					for (int k=-1; k<2; k++) {
+						// Calculate new block position from reach and current Y level
+						BlockPos newBlockPos = rayTraceBlockPos.add(i - halfReach, k, j - halfReach);
+						Block newBlockObj = worldIn.getBlockState(newBlockPos).getBlock();
 
-					// Put out block fires
-					for (int k=-1; k<2; k++) { // Go down one, and up two block layers
-						if (worldIn.getBlockState(tempBlockPos.add(0, k, 0)).getBlock().getUnlocalizedName().equals("tile.fire")) { // If fire
-							worldIn.setBlockToAir(tempBlockPos.add(0, k, 0)); // Extinguish it
+						// Put out block fires
+						if (newBlockObj.getUnlocalizedName().equals("tile.fire")) { // If fire
+							worldIn.setBlockToAir(newBlockPos); // Extinguish it
 							worldIn.playSound(playerIn, playerIn.posX, playerIn.posY, playerIn.posZ, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.5F, 1.0F); // Fire extinguish sound
 						}
-					}
 
-					// Put out entity fires
-					List<EntityMob> affectedMobs = worldIn.getEntitiesWithinAABB(EntityMob.class, new AxisAlignedBB(blockPos.add(-halfReach, -1, -halfReach), blockPos.add(halfReach + 1, 2, halfReach + 1)));
-					for (EntityMob mob : affectedMobs) {
-						mob.extinguish();
-					}
-
-					// Moisten soil
-					for (int k=-1; k<1; k++) { // Go down one layer up/down
-						if (worldIn.getBlockState(tempBlockPos.add(0, k, 0)).getBlock().getUnlocalizedName().equals("tile.farmland")) // If block is farmland
-							worldIn.setBlockState(tempBlockPos.add(0, k, 0), Blocks.FARMLAND.getDefaultState().withProperty(MOISTURE, 7)); // Moisten it
-					}
-
-					// Trigger tick updates
-					if (!tempBlockObj.getUnlocalizedName().equals("tile.farmland")) { // To avoid immediately untilling farmland
-						// Calculate growth speed
-						float growthSpeed = 6; // Initial speed
-
-						// Multipliers
-						if (nbtCompound.getString("fluid").equals("growth_solution"))
-							growthSpeed *= 2.5;
-						if (nbtCompound.getString("material").equals("gold"))
-							growthSpeed *= 1.5;
-
-						// Lower is actually faster, so invert
-						growthSpeed = 30 - growthSpeed;
-
-						// Do tick updates
-						worldIn.updateBlockTick(tempBlockPos, tempBlockObj, (int) growthSpeed, 0);
+						// Moisten soil/Tick Updates
+						if (newBlockObj.getUnlocalizedName().equals("tile.farmland")) // If block is farmland
+							worldIn.setBlockState(newBlockPos, Blocks.FARMLAND.getDefaultState().withProperty(MOISTURE, 7)); // Moisten it
+						else // If not farmland (to avoid immediately untilling)
+							worldIn.updateBlockTick(newBlockPos, newBlockObj, (int) growthSpeed, 0); // Do tick updates
 					}
 				}
 			}
