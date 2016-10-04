@@ -1,5 +1,6 @@
 package ca.wescook.wateringcans.items;
 
+import ca.wescook.wateringcans.particles.ParticleGrowthSolution;
 import ca.wescook.wateringcans.potions.ModPotions;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.ItemMeshDefinition;
@@ -227,9 +228,14 @@ public class ItemWateringCan extends Item {
 			worldIn.playSound(playerIn, playerIn.posX, playerIn.posY, playerIn.posZ, SoundEvents.WEATHER_RAIN, SoundCategory.BLOCKS, 0.12F, 1.85F);
 
 			// Create water particles
-			// TODO: Color according to fluid type
-			for (int i=0; i<25; i++)
-				worldIn.spawnParticle(EnumParticleTypes.WATER_SPLASH, rayTraceVector.xCoord + (worldIn.rand.nextGaussian() * 0.18D), rayTraceVector.yCoord, rayTraceVector.zCoord + (worldIn.rand.nextGaussian() * 0.18D), 0.0D, 0.0D, 0.0D);
+			if (worldIn.isRemote) { // Client only
+				for (int i = 0; i < 25; i++) {
+					if (nbtCompound.getString("fluid").equals("water"))
+						worldIn.spawnParticle(EnumParticleTypes.WATER_SPLASH, rayTraceVector.xCoord + (worldIn.rand.nextGaussian() * 0.18D), rayTraceVector.yCoord, rayTraceVector.zCoord + (worldIn.rand.nextGaussian() * 0.18D), 0.0D, 0.0D, 0.0D);
+					else if (nbtCompound.getString("fluid").equals("growth_solution"))
+						ParticleGrowthSolution.spawn(worldIn, rayTraceVector.xCoord + (worldIn.rand.nextGaussian() * 0.18D), rayTraceVector.yCoord, rayTraceVector.zCoord + (worldIn.rand.nextGaussian() * 0.18D), 0.0D, 0.0D, 0.0D);
+				}
+			}
 
 			// Calculate watering can reach
 			int reach;
