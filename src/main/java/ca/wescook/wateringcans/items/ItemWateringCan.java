@@ -6,15 +6,16 @@ import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.*;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
@@ -23,7 +24,6 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.apache.commons.lang3.text.WordUtils;
 
 import java.util.List;
 
@@ -135,6 +135,13 @@ public class ItemWateringCan extends Item {
 		// Ray trace - find block we're looking at
 		RayTraceResult rayTraceResult = this.rayTrace(worldIn, playerIn, true);
 
+		// Check for/create NBT tag
+		NBTTagCompound nbtCompound = itemStackIn.getTagCompound(); // Check if exists
+		if (nbtCompound == null) { // If not
+			nbtCompound = new NBTTagCompound(); // Create new compound
+			itemStackIn.setTagCompound(nbtCompound); // Attach to itemstack
+		}
+
 		// If sky, ignore
 		if (rayTraceResult != null) {
 			// If a block is found (includes fluids)
@@ -148,13 +155,6 @@ public class ItemWateringCan extends Item {
 				Block blockObj = worldIn.getBlockState(blockPos).getBlock(); // Get block object
 				String blockNameRaw = blockObj.getUnlocalizedName(); // Get block name
 				String blockName = blockNameRaw.substring(5); // Clean .tile prefix
-
-				// Check for/create NBT tag
-				NBTTagCompound nbtCompound = itemStackIn.getTagCompound(); // Check if exists
-				if (nbtCompound == null) { // If not
-					nbtCompound = new NBTTagCompound(); // Create new compound
-					itemStackIn.setTagCompound(nbtCompound); // Attach to itemstack
-				}
 
 				// If found block is in fluid list, refill watering can
 				if (asList(validBlocks).contains(blockName))
@@ -235,12 +235,18 @@ public class ItemWateringCan extends Item {
 					BlockPos tempBlockPos = blockPos.add(i - halfReach, 0, j - halfReach); // Offset to center grid on selected block
 					Block tempBlockObj = worldIn.getBlockState(tempBlockPos).getBlock();
 
-					// Put out fire
+					// Put out block fires
 					for (int k=-1; k<2; k++) { // Go down one, and up two block layers
 						if (worldIn.getBlockState(tempBlockPos.add(0, k, 0)).getBlock().getUnlocalizedName().equals("tile.fire")) { // If fire
 							worldIn.setBlockToAir(tempBlockPos.add(0, k, 0)); // Extinguish it
 							worldIn.playSound(playerIn, playerIn.posX, playerIn.posY, playerIn.posZ, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.5F, 1.0F); // Fire extinguish sound
 						}
+					}
+
+					// Put out entity fires
+					List<EntityMob> affectedMobs = worldIn.getEntitiesWithinAABB(EntityMob.class, new AxisAlignedBB(blockPos.add(-halfReach, -1, -halfReach), blockPos.add(halfReach + 1, 2, halfReach + 1)));
+					for (EntityMob mob : affectedMobs) {
+						mob.extinguish();
 					}
 
 					// Moisten soil

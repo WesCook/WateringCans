@@ -1,5 +1,9 @@
 # Item Names
 item.wateringcans:watering_can.name=Watering Can
+item.wateringcans:watering_can_stone.name=Stone Watering Can
+item.wateringcans:watering_can_iron.name=Iron Watering Can
+item.wateringcans:watering_can_gold.name=Gold Watering Can
+item.wateringcans:watering_can_obsidian.name=Obsidian Watering Can
 
 # Fluids
 fluid.growth_solution=Growth Solution
