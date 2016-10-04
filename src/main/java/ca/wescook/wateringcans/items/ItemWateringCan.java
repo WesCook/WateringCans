@@ -204,8 +204,8 @@ public class ItemWateringCan extends Item {
 		if (amountRemaining > 0) {
 			// Slow player
 			if (nbtCompound.getString("material").equals("obsidian")) {
-				playerIn.addPotionEffect(new PotionEffect(ModPotions.potionInvSlow, 4, 5, false, false)); // Slow player
-				playerIn.addPotionEffect(new PotionEffect(ModPotions.inhibitFOV, 7, 0, false, false)); // Apply secondary, slightly longer potion effect to inhibit FOV changes from slowness
+				playerIn.addPotionEffect(new PotionEffect(ModPotions.potionInvSlow, 5, 5, false, false)); // Slow player
+				playerIn.addPotionEffect(new PotionEffect(ModPotions.inhibitFOV, 10, 0, false, false)); // Apply secondary, slightly longer potion effect to inhibit FOV changes from slowness
 			}
 
 			// Play watering sound

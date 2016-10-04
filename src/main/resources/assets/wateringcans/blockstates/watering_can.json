@@ -2,7 +2,36 @@
 	"forge_marker": 1,
 	"defaults": {
 		"model": "builtin/generated",
-		"transform": "forge:default-item"
+		"transform": {
+			"firstperson_righthand": {
+				"rotation": [{"y": 265.0}],
+				"translation": [0.05, 0.23, 0],
+				"scale": 0.58
+			},
+			"firstperson_lefthand": {
+				"rotation": [{"y": 80.0}],
+				"translation": [0.05, 0.23, 0],
+				"scale": 0.58
+			},
+			"thirdperson_righthand": {
+				"rotation": [{"x": 75}, {"y": 245}],
+				"translation": [0.04, -0.08, -0.26],
+				"scale": 0.5
+			},
+			"thirdperson_lefthand": {
+				"rotation": [{"x": 75}, {"y": 65}],
+				"translation": [0.04, -0.08, -0.26],
+				"scale": 0.5
+			},
+			"gui": {
+				"rotation": [{"x": 0}, {"y": 0}],
+				"translation": [0, -0.05, 0],
+				"scale": 0.9
+			},
+			"ground": {
+				"scale": 0.5
+			}
+		}
 	},
 	"variants": {
 		"material": {
