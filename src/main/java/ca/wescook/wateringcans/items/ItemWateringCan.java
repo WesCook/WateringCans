@@ -66,13 +66,9 @@ public class ItemWateringCan extends Item {
 				{
 					// Get NBT data
 					String material = nbtCompound.getString("material");
-					Short amountRemaining = nbtCompound.getShort("amount");
 					String fluid = nbtCompound.getString("fluid");
 
-					// Calculate petals from amount
-					// Behavior: 8 petals is completely full, 0 petals is completely empty.
-					// 1-7 petals are in-between states, rounded up as a percentage of the max storage amount
-					byte petals = (byte) Math.ceil(((double) amountRemaining / (fluidCapacity - 1)) * (petalVariations - 1 - 1));
+					byte petals = countPetals(itemStackIn);
 
 					// Return dynamic texture location
 					if (petals == 0)
@@ -136,7 +132,7 @@ public class ItemWateringCan extends Item {
 			NBTTagCompound newNBT = newStack.getTagCompound();
 
 			if (oldNBT != null && newNBT != null) { // NBT exists
-				if (oldNBT.getString("material").equals(newNBT.getString("material")) && oldNBT.getShort("fluid") == newNBT.getShort("fluid")) // If material and fluid type match
+				if ((oldNBT.getString("material").equals(newNBT.getString("material"))) && (oldNBT.getShort("fluid") == newNBT.getShort("fluid")) && (countPetals(oldStack) == countPetals(newStack))) // If material, fluid type, and petal count match
 					return false; // Only fluid amount changed, don't animate
 			}
 		}
@@ -308,5 +304,20 @@ public class ItemWateringCan extends Item {
 				worldIn.playSound(playerIn, playerIn.posX, playerIn.posY, playerIn.posZ, SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.PLAYERS, 1.0F, 1.0F); // Tool break sound
 			}
 		}
+	}
+
+	// Calculate petals from NBT "amount" in ItemStack
+	private byte countPetals(ItemStack stack) {
+		// Get NBT data
+		NBTTagCompound nbtCompound = stack.getTagCompound();
+		if (nbtCompound != null) {
+			Short amountRemaining = nbtCompound.getShort("amount");
+
+			// Behavior: 8 petals is completely full, 0 petals is completely empty.
+			// 1-7 petals are in-between states, rounded up as a percentage of the max storage amount
+			return (byte) Math.ceil(((double) amountRemaining / (fluidCapacity - 1)) * (petalVariations - 1 - 1));
+		}
+
+		return (byte) -1; // Error
 	}
 }
