@@ -126,6 +126,24 @@ public class ItemWateringCan extends Item {
 		return "item." + getRegistryName().toString(); // Fall back to default
 	}
 
+	// Don't animate re-equipping item
+	@Override
+	public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged)
+	{
+		if (oldStack.getItem() == newStack.getItem()) { // If item matches
+			// Grab NBT data
+			NBTTagCompound oldNBT = oldStack.getTagCompound();
+			NBTTagCompound newNBT = newStack.getTagCompound();
+
+			if (oldNBT != null && newNBT != null) { // NBT exists
+				if (oldNBT.getString("material").equals(newNBT.getString("material")) && oldNBT.getShort("fluid") == newNBT.getShort("fluid")) // If material and fluid type match
+					return false; // Only fluid amount changed, don't animate
+			}
+		}
+
+		return true; // Something bigger changed, animate
+	}
+
 	// On right click
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
@@ -250,7 +268,7 @@ public class ItemWateringCan extends Item {
 					}
 
 					// Moisten soil
-					for (int k=-1; k<0; k++) { // Go down one layer
+					for (int k=-1; k<1; k++) { // Go down one layer up/down
 						if (worldIn.getBlockState(tempBlockPos.add(0, k, 0)).getBlock().getUnlocalizedName().equals("tile.farmland")) // If block is farmland
 							worldIn.setBlockState(tempBlockPos.add(0, k, 0), Blocks.FARMLAND.getDefaultState().withProperty(MOISTURE, 7)); // Moisten it
 					}
@@ -276,7 +294,6 @@ public class ItemWateringCan extends Item {
 			}
 
 			// Decrease fluid amount
-			// TODO: See if NBT can be updated without resetting held item
 			if (amountRemaining > 0) {
 				if (nbtCompound.getString("material").equals("stone")) // If stone
 					nbtCompound.setShort("amount", (short) (amountRemaining - 2)); // Drain quicker (simulate smaller tank)
