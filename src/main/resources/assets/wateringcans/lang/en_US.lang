@@ -5,5 +5,11 @@ item.wateringcans:watering_can_iron.name=Iron Watering Can
 item.wateringcans:watering_can_gold.name=Gold Watering Can
 item.wateringcans:watering_can_obsidian.name=Obsidian Watering Can
 
+# Tooltips
+tooltip.watering_can_stone=Small tank but easy to make
+tooltip.watering_can_iron=Jack of all trades
+tooltip.watering_can_gold=Faster hydration, one use
+tooltip.watering_can_obsidian=Far reaching, heavy
+
 # Fluids
 fluid.growth_solution=Growth Solution

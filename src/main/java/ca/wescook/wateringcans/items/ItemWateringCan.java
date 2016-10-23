@@ -9,7 +9,7 @@ import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
@@ -22,7 +22,6 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.text.translation.LanguageMap;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -145,6 +144,7 @@ public class ItemWateringCan extends Item {
 		return true; // Something bigger changed, animate
 	}
 
+	// Add tooltips
 	@Override
 	public void addInformation(ItemStack stack, EntityPlayer player, List tooltip, boolean advanced)
 	{
@@ -241,7 +241,7 @@ public class ItemWateringCan extends Item {
 
 			// Slow player using obsidian can
 			if (nbtCompound.getString("material").equals("obsidian")) {
-				playerIn.addPotionEffect(new PotionEffect(ModPotions.potionInvSlow, 5, 5, false, false)); // Slow player
+				playerIn.addPotionEffect(new PotionEffect(ModPotions.slowPlayer, 5, 5, false, false)); // Slow player
 				playerIn.addPotionEffect(new PotionEffect(ModPotions.inhibitFOV, 10, 0, false, false)); // Apply secondary, slightly longer potion effect to inhibit FOV changes from slowness
 			}
 
@@ -277,10 +277,9 @@ public class ItemWateringCan extends Item {
 			growthSpeed = 30 - growthSpeed; // Lower is actually faster, so invert
 
 			// Put out entity fires
-			List<EntityMob> affectedMobs = worldIn.getEntitiesWithinAABB(EntityMob.class, new AxisAlignedBB(rayTraceBlockPos.add(-halfReach, -1, -halfReach), rayTraceBlockPos.add(halfReach + 1, 2, halfReach + 1))); // Find mobs
-			for (EntityMob mob : affectedMobs) { // Loop through found mobs
+			List<EntityLivingBase> affectedMobs = worldIn.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(rayTraceBlockPos.add(-halfReach, -1, -halfReach), rayTraceBlockPos.add(halfReach + 1, 2, halfReach + 1))); // Find mobs
+			for (EntityLivingBase mob : affectedMobs) // Loop through found mobs/players
 				mob.extinguish(); // Extinguish fire
-			}
 
 			// Iterate through total reach
 			for (int i=0; i<reach; i++) {
