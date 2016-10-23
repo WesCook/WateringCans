@@ -1,37 +1,7 @@
 {
 	"forge_marker": 1,
 	"defaults": {
-		"model": "builtin/generated",
-		"transform": {
-			"firstperson_righthand": {
-				"rotation": [{"y": 265.0}],
-				"translation": [0.05, 0.23, 0],
-				"scale": 0.58
-			},
-			"firstperson_lefthand": {
-				"rotation": [{"y": 80.0}],
-				"translation": [0.05, 0.23, 0],
-				"scale": 0.58
-			},
-			"thirdperson_righthand": {
-				"rotation": [{"x": 75}, {"y": 245}],
-				"translation": [0.04, -0.08, -0.26],
-				"scale": 0.5
-			},
-			"thirdperson_lefthand": {
-				"rotation": [{"x": 75}, {"y": 65}],
-				"translation": [0.04, -0.08, -0.26],
-				"scale": 0.5
-			},
-			"gui": {
-				"rotation": [{"x": 0}, {"y": 0}],
-				"translation": [0, -0.05, 0],
-				"scale": 0.9
-			},
-			"ground": {
-				"scale": 0.5
-			}
-		}
+		"model": "builtin/generated"
 	},
 	"variants": {
 		"material": {
@@ -58,6 +28,72 @@
 			"growth_solution_6":  { "textures": { "layer1": "wateringcans:items/petals/watering_can_petal_gs_06" } },
 			"growth_solution_7":  { "textures": { "layer1": "wateringcans:items/petals/watering_can_petal_gs_07" } },
 			"growth_solution_8":  { "textures": { "layer1": "wateringcans:items/petals/watering_can_petal_gs_08" } }
+		},
+		"currently_watering": {
+			"false": {
+				"transform": {
+					"firstperson_righthand": {
+						"rotation": [{"y": 280.0}],
+						"translation": [0.005, 0.23, 0],
+						"scale": 0.58
+					},
+					"firstperson_lefthand": {
+						"rotation": [{"y": 85.0}],
+						"translation": [0.065, 0.23, 0],
+						"scale": 0.58
+					},
+					"thirdperson_righthand": {
+						"rotation": [{"x": 75}, {"y": 245}],
+						"translation": [0.04, -0.08, -0.26],
+						"scale": 0.5
+					},
+					"thirdperson_lefthand": {
+						"rotation": [{"x": 75}, {"y": 65}],
+						"translation": [0.04, -0.08, -0.26],
+						"scale": 0.5
+					},
+					"gui": {
+						"rotation": [{"x": 0}, {"y": 0}],
+						"translation": [0, -0.05, 0],
+						"scale": 0.9
+					},
+					"ground": {
+						"scale": 0.5
+					}
+				}
+			},
+			"true": {
+				"transform": {
+					"firstperson_righthand": {
+						"rotation": [{"x": 335.0}, {"y": 265.0}],
+						"translation": [0.02, 0.23, 0],
+						"scale": 0.58
+					},
+					"firstperson_lefthand": {
+						"rotation": [{"x": 335.0}, {"y": 75.0}],
+						"translation": [0.07, 0.23, 0],
+						"scale": 0.58
+					},
+					"thirdperson_righthand": {
+						"rotation": [{"x": 75}, {"y": 245}, {"z": 40}],
+						"translation": [0.04, -0.08, -0.26],
+						"scale": 0.5
+					},
+					"thirdperson_lefthand": {
+						"rotation": [{"x": 75}, {"y": 65}, {"z": 40}],
+						"translation": [0.04, -0.08, -0.26],
+						"scale": 0.5
+					},
+					"gui": {
+						"rotation": [{"x": 0}, {"y": 0}],
+						"translation": [0, -0.05, 0],
+						"scale": 0.9
+					},
+					"ground": {
+						"scale": 0.5
+					}
+				}
+			}
 		}
 	}
 }

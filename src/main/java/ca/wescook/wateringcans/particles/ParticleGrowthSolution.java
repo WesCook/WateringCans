@@ -14,7 +14,7 @@ public class ParticleGrowthSolution extends ParticleSplash {
 	}
 
 	// Method called directly to spawn particles
-	public static void spawn(World worldIn, double x, double y, double z, double vx, double vy, double vz) {
-		Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleGrowthSolution(worldIn, x, y, z, vx, vy, vz));
+	public static void spawn(World worldIn, double xCoordIn, double yCoordIn, double zCoordIn, double xSpeedIn, double ySpeedIn, double zSpeedIn) {
+		Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleGrowthSolution(worldIn, xCoordIn, yCoordIn, zCoordIn, xSpeedIn, ySpeedIn, zSpeedIn));
 	}
 }

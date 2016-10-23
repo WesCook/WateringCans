@@ -3,10 +3,12 @@ package ca.wescook.wateringcans.items;
 import ca.wescook.wateringcans.particles.ParticleGrowthSolution;
 import ca.wescook.wateringcans.potions.ModPotions;
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -26,6 +28,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 import static ca.wescook.wateringcans.WateringCans.*;
@@ -39,19 +42,24 @@ public class ItemWateringCan extends Item {
 		GameRegistry.register(this);
 		setCreativeTab(CreativeTabs.TOOLS);
 		setMaxStackSize(1);
+		setHasSubtypes(true);
 	}
 
 	@SideOnly(Side.CLIENT)
 	void render() {
+		String[] currentlyWateringList = new String[]{"true", "false"};
+
 		// Register all possible item model combinations (once at runtime)
 		for (String material : materials) { // All materials
-			// Register empty variant
-			ModelBakery.registerItemVariants(this, new ModelResourceLocation(getRegistryName(), "material=" + material + ",petals=empty"));
+			for (String currentlyWatering : currentlyWateringList) {
+				// Register empty variant
+				ModelBakery.registerItemVariants(this, new ModelResourceLocation(getRegistryName(), "currently_watering=" + currentlyWatering + ",material=" + material + ",petals=empty"));
 
-			// Register filled variants
-			for (int i=1; i<petalVariations; i++) { // Petal counts
-				for (String fluid : fluids) { // All fluids
-					ModelBakery.registerItemVariants(this, new ModelResourceLocation(getRegistryName(), "material=" + material + ",petals=" + fluid + "_" + i));
+				// Register filled variants
+				for (int i = 1; i < petalVariations; i++) { // Petal counts
+					for (String fluid : fluids) { // All fluids
+						ModelBakery.registerItemVariants(this, new ModelResourceLocation(getRegistryName(), "currently_watering=" + currentlyWatering + ",material=" + material + ",petals=" + fluid + "_" + i));
+					}
 				}
 			}
 		}
@@ -63,19 +71,28 @@ public class ItemWateringCan extends Item {
 
 				// Set material from NBT data
 				NBTTagCompound nbtCompound = itemStackIn.getTagCompound();
-				if (nbtCompound != null)
-				{
+				if (nbtCompound != null) {
 					// Get NBT data
 					String material = nbtCompound.getString("material");
 					String fluid = nbtCompound.getString("fluid");
 
+					// Get petal number
 					byte petals = countPetals(itemStackIn);
+
+					// Is player using watering can
+					//String wateringStatus = (nbtCompound.getBoolean("currently_watering")) ? "true" : "false";
+
+					// Is player using watering can
+					EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+					String wateringStatus = "false";
+					if (player.getActivePotionEffect(ModPotions.usingWateringCan) != null)
+						wateringStatus = "true";
 
 					// Return dynamic texture location
 					if (petals == 0)
-						return new ModelResourceLocation(getRegistryName(), "material=" + material + ",petals=empty");
+						return new ModelResourceLocation(getRegistryName(), "currently_watering=" + wateringStatus + ",material=" + material + ",petals=empty");
 					else
-						return new ModelResourceLocation(getRegistryName(), "material=" + material + ",petals=" + fluid + "_" + petals);
+						return new ModelResourceLocation(getRegistryName(), "currently_watering=" + wateringStatus + ",material=" + material + ",petals=" + fluid + "_" + petals);
 				}
 				else {
 					// NBT isn't set, may be spawned in
@@ -84,7 +101,7 @@ public class ItemWateringCan extends Item {
 				}
 
 				// Rendering without assigned NBT data.  Return empty watering can.
-				return new ModelResourceLocation(getRegistryName(), "material=iron,petals=empty");
+				return new ModelResourceLocation(getRegistryName(), "currently_watering=false,material=iron,petals=empty");
 			}
 		});
 	}
@@ -99,16 +116,6 @@ public class ItemWateringCan extends Item {
 			tempItem.setTagCompound(nbtCompound); // Assign tag to ItemStack
 			list.add(tempItem); // Add to creative menu
 		}
-	}
-
-	// Apply some default NBT on item creation
-	// From crafting, spawning in, or creative menu
-	public static NBTTagCompound getDefaultNBT() {
-		NBTTagCompound nbtCompound = new NBTTagCompound();
-		nbtCompound.setString("material", "iron");
-		nbtCompound.setString("fluid", "water");
-		nbtCompound.setShort("amount", (short) 0);
-		return nbtCompound;
 	}
 
 	// Add material to name
@@ -141,9 +148,21 @@ public class ItemWateringCan extends Item {
 		return true; // Something bigger changed, animate
 	}
 
+	public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft) {
+		NBTTagCompound nbtCompound = stack.getTagCompound();
+		if (nbtCompound != null)
+			nbtCompound.setBoolean("currently_watering", false);
+	}
+
+	@Override
+	public int getMaxItemUseDuration(ItemStack stack) {
+		return 72000;
+	}
+
 	// On right click
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
+
 		// List of valid fluid blocks
 		String[] validBlocks = new String[]{"water", MODID + ":growth_solution_block"};
 
@@ -171,11 +190,15 @@ public class ItemWateringCan extends Item {
 				String blockNameRaw = blockObj.getUnlocalizedName(); // Get block name
 				String blockName = blockNameRaw.substring(5); // Clean .tile prefix
 
+				// Set item in use
+				playerIn.setActiveHand(hand);
+				//nbtCompound.setBoolean("currently_watering", true);
+
 				// If found block is in fluid list, refill watering can
 				if (asList(validBlocks).contains(blockName))
 					refillWateringCan(worldIn, playerIn, nbtCompound, blockName, blockPos);
 				else // Water that block
-					commenceWatering(worldIn, playerIn, itemStackIn, nbtCompound, rayTraceVector, hand, blockPos);
+					commenceWatering(worldIn, playerIn, itemStackIn, nbtCompound, rayTraceVector, blockPos);
 			}
 		}
 		return new ActionResult(EnumActionResult.PASS, itemStackIn); // PASS instead of SUCCESS so we can dual wield watering cans, aww yiss
@@ -213,12 +236,16 @@ public class ItemWateringCan extends Item {
 		nbtCompound.setShort("amount", fluidCapacity);
 	}
 
-	private void commenceWatering(World worldIn, EntityPlayer playerIn, ItemStack itemStackIn, NBTTagCompound nbtCompound, Vec3d rayTraceVector, EnumHand hand, BlockPos rayTraceBlockPos) {
+	private void commenceWatering(World worldIn, EntityPlayer playerIn, ItemStack itemStackIn, NBTTagCompound nbtCompound, Vec3d rayTraceVector, BlockPos rayTraceBlockPos) {
 		// If water remains in can
 		short amountRemaining = nbtCompound.getShort("amount");
 
 		if (amountRemaining > 0) {
-			// Slow player
+
+			// Set player as currently watering (via potions because onItemUseFinish is finicky)
+			playerIn.addPotionEffect(new PotionEffect(ModPotions.usingWateringCan, 6, 0, false, false)); // Set player to "using can"
+
+			// Slow player using obsidian can
 			if (nbtCompound.getString("material").equals("obsidian")) {
 				playerIn.addPotionEffect(new PotionEffect(ModPotions.potionInvSlow, 5, 5, false, false)); // Slow player
 				playerIn.addPotionEffect(new PotionEffect(ModPotions.inhibitFOV, 10, 0, false, false)); // Apply secondary, slightly longer potion effect to inhibit FOV changes from slowness
@@ -325,5 +352,16 @@ public class ItemWateringCan extends Item {
 		}
 
 		return (byte) -1; // Error
+	}
+
+	// Apply some default NBT on item creation
+	// From crafting, spawning in, or creative menu
+	public static NBTTagCompound getDefaultNBT() {
+		NBTTagCompound nbtCompound = new NBTTagCompound();
+		nbtCompound.setString("material", "iron");
+		nbtCompound.setString("fluid", "water");
+		nbtCompound.setShort("amount", (short) 0);
+		//nbtCompound.setBoolean("currently_watering", false);
+		return nbtCompound;
 	}
 }
