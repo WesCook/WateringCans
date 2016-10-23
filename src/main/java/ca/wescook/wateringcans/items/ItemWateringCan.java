@@ -8,7 +8,6 @@ import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -28,7 +27,6 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
 import static ca.wescook.wateringcans.WateringCans.*;
@@ -47,18 +45,18 @@ public class ItemWateringCan extends Item {
 
 	@SideOnly(Side.CLIENT)
 	void render() {
-		String[] currentlyWateringList = new String[]{"true", "false"};
+		String[] wateringStates = new String[]{"true", "false"};
 
 		// Register all possible item model combinations (once at runtime)
 		for (String material : materials) { // All materials
-			for (String currentlyWatering : currentlyWateringList) {
+			for (String wateringState : wateringStates) {
 				// Register empty variant
-				ModelBakery.registerItemVariants(this, new ModelResourceLocation(getRegistryName(), "currently_watering=" + currentlyWatering + ",material=" + material + ",petals=empty"));
+				ModelBakery.registerItemVariants(this, new ModelResourceLocation(getRegistryName(), "currently_watering=" + wateringState + ",material=" + material + ",petals=empty"));
 
 				// Register filled variants
 				for (int i = 1; i < petalVariations; i++) { // Petal counts
 					for (String fluid : fluids) { // All fluids
-						ModelBakery.registerItemVariants(this, new ModelResourceLocation(getRegistryName(), "currently_watering=" + currentlyWatering + ",material=" + material + ",petals=" + fluid + "_" + i));
+						ModelBakery.registerItemVariants(this, new ModelResourceLocation(getRegistryName(), "currently_watering=" + wateringState + ",material=" + material + ",petals=" + fluid + "_" + i));
 					}
 				}
 			}
@@ -80,19 +78,16 @@ public class ItemWateringCan extends Item {
 					byte petals = countPetals(itemStackIn);
 
 					// Is player using watering can
-					//String wateringStatus = (nbtCompound.getBoolean("currently_watering")) ? "true" : "false";
-
-					// Is player using watering can
 					EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-					String wateringStatus = "false";
+					String currentlyWatering = "false";
 					if (player.getActivePotionEffect(ModPotions.usingWateringCan) != null)
-						wateringStatus = "true";
+						currentlyWatering = "true";
 
 					// Return dynamic texture location
 					if (petals == 0)
-						return new ModelResourceLocation(getRegistryName(), "currently_watering=" + wateringStatus + ",material=" + material + ",petals=empty");
+						return new ModelResourceLocation(getRegistryName(), "currently_watering=" + currentlyWatering + ",material=" + material + ",petals=empty");
 					else
-						return new ModelResourceLocation(getRegistryName(), "currently_watering=" + wateringStatus + ",material=" + material + ",petals=" + fluid + "_" + petals);
+						return new ModelResourceLocation(getRegistryName(), "currently_watering=" + currentlyWatering + ",material=" + material + ",petals=" + fluid + "_" + petals);
 				}
 				else {
 					// NBT isn't set, may be spawned in
@@ -148,17 +143,6 @@ public class ItemWateringCan extends Item {
 		return true; // Something bigger changed, animate
 	}
 
-	public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft) {
-		NBTTagCompound nbtCompound = stack.getTagCompound();
-		if (nbtCompound != null)
-			nbtCompound.setBoolean("currently_watering", false);
-	}
-
-	@Override
-	public int getMaxItemUseDuration(ItemStack stack) {
-		return 72000;
-	}
-
 	// On right click
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
@@ -190,10 +174,6 @@ public class ItemWateringCan extends Item {
 				String blockNameRaw = blockObj.getUnlocalizedName(); // Get block name
 				String blockName = blockNameRaw.substring(5); // Clean .tile prefix
 
-				// Set item in use
-				playerIn.setActiveHand(hand);
-				//nbtCompound.setBoolean("currently_watering", true);
-
 				// If found block is in fluid list, refill watering can
 				if (asList(validBlocks).contains(blockName))
 					refillWateringCan(worldIn, playerIn, nbtCompound, blockName, blockPos);
@@ -201,7 +181,7 @@ public class ItemWateringCan extends Item {
 					commenceWatering(worldIn, playerIn, itemStackIn, nbtCompound, rayTraceVector, blockPos);
 			}
 		}
-		return new ActionResult(EnumActionResult.PASS, itemStackIn); // PASS instead of SUCCESS so we can dual wield watering cans, aww yiss
+		return new ActionResult(EnumActionResult.PASS, itemStackIn); // PASS instead of SUCCESS so we can dual wield watering cans
 	}
 
 	private void refillWateringCan(World worldIn, EntityPlayer playerIn, NBTTagCompound nbtCompound, String blockName, BlockPos blockPos) {
@@ -222,8 +202,10 @@ public class ItemWateringCan extends Item {
 		worldIn.setBlockToAir(blockPos);
 
 		// Create bubbles
-		for (int i=0; i<10; i++)
-			worldIn.spawnParticle(EnumParticleTypes.WATER_BUBBLE, blockPos.getX() + 0.5 + (worldIn.rand.nextGaussian() * 0.3D), blockPos.getY() + 1, blockPos.getZ() + 0.5 + (worldIn.rand.nextGaussian() * 0.3D), 0.0D, 0.0D, 0.0D);
+		if (worldIn.isRemote) {
+			for (int i = 0; i < 15; i++)
+				worldIn.spawnParticle(EnumParticleTypes.WATER_BUBBLE, blockPos.getX() + 0.5 + (worldIn.rand.nextGaussian() * 0.3D), blockPos.getY() + 1, blockPos.getZ() + 0.5 + (worldIn.rand.nextGaussian() * 0.3D), 0.0D, 0.0D, 0.0D);
+		}
 
 		// Assign fluid based on block
 		// TODO: Add tooltips for fluid/amount
@@ -237,12 +219,12 @@ public class ItemWateringCan extends Item {
 	}
 
 	private void commenceWatering(World worldIn, EntityPlayer playerIn, ItemStack itemStackIn, NBTTagCompound nbtCompound, Vec3d rayTraceVector, BlockPos rayTraceBlockPos) {
+
 		// If water remains in can
 		short amountRemaining = nbtCompound.getShort("amount");
-
 		if (amountRemaining > 0) {
 
-			// Set player as currently watering (via potions because onItemUseFinish is finicky)
+			// Set player as currently watering (via potions because onItemUseFinish is too limiting)
 			playerIn.addPotionEffect(new PotionEffect(ModPotions.usingWateringCan, 6, 0, false, false)); // Set player to "using can"
 
 			// Slow player using obsidian can
@@ -299,7 +281,7 @@ public class ItemWateringCan extends Item {
 
 						// Put out block fires
 						if (newBlockObj.getRegistryName().toString().equals("minecraft:fire")) { // If fire
-							worldIn.setBlockToAir(newBlockPos); // Extinguish it
+							worldIn.setBlockToAir(newBlockPos); // Remove it
 							worldIn.playSound(playerIn, playerIn.posX, playerIn.posY, playerIn.posZ, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.5F, 1.0F); // Fire extinguish sound
 						}
 
@@ -324,7 +306,7 @@ public class ItemWateringCan extends Item {
 			// If gold can is empty, destroy it
 			if (nbtCompound.getString("material").equals("gold") && nbtCompound.getBoolean("filledOnce")) {
 
-				// Get data
+				// Get slot of active watering can (hand or hotbar)
 				int slot = playerIn.inventory.getSlotFor(itemStackIn); // Get ID from itemstack (returns -1 in offhand)
 				final int handSlot = 40; // Offhand slot
 
@@ -361,7 +343,6 @@ public class ItemWateringCan extends Item {
 		nbtCompound.setString("material", "iron");
 		nbtCompound.setString("fluid", "water");
 		nbtCompound.setShort("amount", (short) 0);
-		//nbtCompound.setBoolean("currently_watering", false);
 		return nbtCompound;
 	}
 }
