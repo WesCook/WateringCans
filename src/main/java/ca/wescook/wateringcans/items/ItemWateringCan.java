@@ -7,6 +7,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
@@ -21,6 +22,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.translation.LanguageMap;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -142,6 +144,16 @@ public class ItemWateringCan extends Item {
 
 		return true; // Something bigger changed, animate
 	}
+
+	@Override
+	public void addInformation(ItemStack stack, EntityPlayer player, List tooltip, boolean advanced)
+	{
+		NBTTagCompound compound = stack.getTagCompound();
+		if (compound != null) {
+			tooltip.add("§8" + I18n.format("tooltip.watering_can_" + compound.getString("material")));
+		}
+	}
+
 
 	// On right click
 	@Override
