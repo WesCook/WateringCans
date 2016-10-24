@@ -27,6 +27,7 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.apache.commons.lang3.text.WordUtils;
 
 import java.util.List;
 
@@ -150,7 +151,12 @@ public class ItemWateringCan extends Item {
 	{
 		NBTTagCompound compound = stack.getTagCompound();
 		if (compound != null) {
-			tooltip.add("§8" + I18n.format("tooltip.watering_can_" + compound.getString("material")));
+			if (compound.getShort("amount") == 0) { // If empty
+				tooltip.add("§8" + I18n.format("tooltip.watering_can_" + compound.getString("material"))); // Display material tooltip
+			} else {
+				tooltip.add("§8Contains: " + WordUtils.capitalize(compound.getString("fluid").replace("_", " "))); // Else display fluid type and amount, while cleaning up string
+				tooltip.add("§8Remaining: " + compound.getShort("amount"));
+			}
 		}
 	}
 
