@@ -67,7 +67,6 @@ public class ModCrafting {
 		// Growth Solution Bucket //
 		////////////////////////////
 
-		// TODO: Look into JEI handling
 		GameRegistry.addRecipe(new CraftGrowthSolution());
 	}
 }

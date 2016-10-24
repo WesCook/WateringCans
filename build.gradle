@@ -23,7 +23,14 @@ minecraft {
 	mappings = "snapshot_20160518"
 }
 
+repositories {
+	maven {
+		url "http://dvs1.progwml6.com/files/maven" // JEI
+	}
+}
+
 dependencies {
+	compile "mezz.jei:jei_1.10.2:3.12.8.323:api" // JEI
 }
 
 processResources

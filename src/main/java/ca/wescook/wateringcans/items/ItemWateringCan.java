@@ -220,7 +220,6 @@ public class ItemWateringCan extends Item {
 		}
 
 		// Assign fluid based on block
-		// TODO: Add tooltips for fluid/amount
 		if (blockName.equals("water"))
 			nbtCompound.setString("fluid", "water");
 		else if (blockName.equals(MODID + ":growth_solution_block"))

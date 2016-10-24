@@ -6,10 +6,17 @@ item.wateringcans:watering_can_gold.name=Gold Watering Can
 item.wateringcans:watering_can_obsidian.name=Obsidian Watering Can
 
 # Tooltips
-tooltip.watering_can_stone=Small tank but easy to make
+tooltip.watering_can_stone=The frugal option
 tooltip.watering_can_iron=Jack of all trades
 tooltip.watering_can_gold=Faster hydration, one use
-tooltip.watering_can_obsidian=Far reaching, heavy
+tooltip.watering_can_obsidian=Far reaching
+
+# JEI
+jei.watering_cans.watering_can_stone=While cheaper to make, this watering can only has half the usual tank size.
+jei.watering_cans.watering_can_iron=Dependable and rugged, but offering no special features.
+jei.watering_cans.watering_can_gold=The gold watering can has an automatic 1.5* multiplier to growth, but can only be filled once.
+jei.watering_cans.watering_can_obsidian=Heavy to use, but its reach is increased to 5x5.
+jei.watering_cans.growth_bucket=Crafted from a water bucket and bonemeal.\n\nCan be placed in the world and picked up with a watering can.
 
 # Fluids
 fluid.growth_solution=Growth Solution

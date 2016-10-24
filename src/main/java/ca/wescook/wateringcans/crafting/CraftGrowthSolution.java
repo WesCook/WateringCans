@@ -15,8 +15,6 @@ class CraftGrowthSolution implements IRecipe {
 
 	@Override
 	public boolean matches(InventoryCrafting craftMatrix, World worldIn) {
-		// TODO: Refactor crafting handler to abstract out recipe/eliminate hardcoding
-
 		// Init
 		int waterFound = 0;
 		int bonemealFound = 0;
@@ -36,18 +34,16 @@ class CraftGrowthSolution implements IRecipe {
 					somethingElseFound = true;
 			}
 		}
-		// Recipe matches
-		if (waterFound == 1 && bonemealFound == 1 && !somethingElseFound)
-			return true;
 
-		return false;
+		// Recipe matches
+		return (waterFound == 1 && bonemealFound == 1 && !somethingElseFound);
 	}
 
 	@Nullable
 	@Override
 	public ItemStack getCraftingResult(InventoryCrafting craftMatrix) {
 		ItemStack growthBucket = UniversalBucket.getFilledBucket(ForgeModContainer.getInstance().universalBucket, ModFluids.fluidGrowthSolution);
-		return growthBucket;
+		return UniversalBucket.getFilledBucket(ForgeModContainer.getInstance().universalBucket, ModFluids.fluidGrowthSolution);
 	}
 
 	@Override
@@ -63,7 +59,7 @@ class CraftGrowthSolution implements IRecipe {
 
 	@Override
 	public ItemStack[] getRemainingItems(InventoryCrafting craftMatrix) {
-		// Remove crafting ingredients (necessary for buckets)
+		// Clear crafting grid
 		return new ItemStack[craftMatrix.getSizeInventory()];
 	}
 }

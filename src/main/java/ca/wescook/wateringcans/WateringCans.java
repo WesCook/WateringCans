@@ -9,12 +9,15 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
-@Mod(modid = WateringCans.MODID, name = WateringCans.MODNAME, version = WateringCans.VERSION)
+import static ca.wescook.wateringcans.WateringCans.*;
+
+@Mod(modid = MODID, name = MODNAME, version = VERSION, dependencies = DEPENDENCIES)
 public class WateringCans {
 	// Mod Info
 	public static final String MODID = "wateringcans";
 	public static final String MODNAME = "Watering Cans";
 	public static final String VERSION = "1.0";
+	public static final String DEPENDENCIES = "after:JEI@[3.7.2.220,)"; // [] Inclusive, () Exclusive
 
 	// Mod Constants
 	public static final String[] materials = new String[]{"stone", "iron", "gold", "obsidian"};
