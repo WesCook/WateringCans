@@ -14,7 +14,6 @@ import javax.annotation.Nonnull;
 
 @mezz.jei.api.JEIPlugin
 public class JEIPlugin extends BlankModPlugin {
-
 	@Override
 	public void register(@Nonnull IModRegistry registry) {
 

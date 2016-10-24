@@ -118,7 +118,6 @@ public class ItemWateringCan extends Item {
 	// Add material to name
 	@Override
 	public String getUnlocalizedName(ItemStack stack) {
-
 		// Assign based on material
 		NBTTagCompound natCompound = stack.getTagCompound();
 		if (natCompound != null)
@@ -129,8 +128,7 @@ public class ItemWateringCan extends Item {
 
 	// Don't animate re-equipping item
 	@Override
-	public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged)
-	{
+	public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
 		if (oldStack.getItem() == newStack.getItem()) { // If item matches
 			// Grab NBT data
 			NBTTagCompound oldNBT = oldStack.getTagCompound();
@@ -147,8 +145,7 @@ public class ItemWateringCan extends Item {
 
 	// Add tooltips
 	@Override
-	public void addInformation(ItemStack stack, EntityPlayer player, List tooltip, boolean advanced)
-	{
+	public void addInformation(ItemStack stack, EntityPlayer player, List tooltip, boolean advanced) {
 		NBTTagCompound compound = stack.getTagCompound();
 		if (compound != null) {
 			if (compound.getShort("amount") == 0) { // If empty
@@ -164,7 +161,6 @@ public class ItemWateringCan extends Item {
 	// On right click
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
-
 		// List of valid fluid blocks
 		String[] validBlocks = new String[]{"water", MODID + ":growth_solution_block"};
 
@@ -199,7 +195,7 @@ public class ItemWateringCan extends Item {
 					commenceWatering(worldIn, playerIn, itemStackIn, nbtCompound, rayTraceVector, blockPos);
 			}
 		}
-		return new ActionResult(EnumActionResult.PASS, itemStackIn); // PASS instead of SUCCESS so we can dual wield watering cans
+		return new ActionResult<ItemStack>(EnumActionResult.PASS, itemStackIn); // PASS instead of SUCCESS so we can dual wield watering cans
 	}
 
 	private void refillWateringCan(World worldIn, EntityPlayer playerIn, NBTTagCompound nbtCompound, String blockName, BlockPos blockPos) {
@@ -217,7 +213,8 @@ public class ItemWateringCan extends Item {
 		worldIn.playSound(playerIn, playerIn.posX, playerIn.posY, playerIn.posZ, SoundEvents.ITEM_BUCKET_FILL, SoundCategory.BLOCKS, 1.0F, 1.0F);
 
 		// Destroy source block
-		worldIn.setBlockToAir(blockPos);
+		if (!playerIn.isCreative())
+			worldIn.setBlockToAir(blockPos);
 
 		// Create bubbles
 		if (worldIn.isRemote) {
@@ -236,7 +233,6 @@ public class ItemWateringCan extends Item {
 	}
 
 	private void commenceWatering(World worldIn, EntityPlayer playerIn, ItemStack itemStackIn, NBTTagCompound nbtCompound, Vec3d rayTraceVector, BlockPos rayTraceBlockPos) {
-
 		// If water remains in can
 		short amountRemaining = nbtCompound.getShort("amount");
 		if (amountRemaining > 0) {
