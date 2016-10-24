@@ -6,10 +6,10 @@ item.wateringcans:watering_can_gold.name=Gold Watering Can
 item.wateringcans:watering_can_obsidian.name=Obsidian Watering Can
 
 # Tooltips
-tooltip.watering_can_stone=The frugal option
-tooltip.watering_can_iron=Jack of all trades
-tooltip.watering_can_gold=Faster hydration, one use
-tooltip.watering_can_obsidian=Far reaching
+tooltip.watering_can_stone=%sThe frugal option
+tooltip.watering_can_iron=%sJack of all trades
+tooltip.watering_can_gold=%sFaster hydration, one use
+tooltip.watering_can_obsidian=%sFar reaching
 
 # JEI
 jei.watering_cans.watering_can_stone=While cheaper to make, this watering can only has half the usual tank size.

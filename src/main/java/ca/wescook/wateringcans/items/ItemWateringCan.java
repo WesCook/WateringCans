@@ -22,6 +22,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -149,10 +150,10 @@ public class ItemWateringCan extends Item {
 		NBTTagCompound compound = stack.getTagCompound();
 		if (compound != null) {
 			if (compound.getShort("amount") == 0) { // If empty
-				tooltip.add("§8" + I18n.format("tooltip.watering_can_" + compound.getString("material"))); // Display material tooltip
+				tooltip.add(I18n.format("tooltip.watering_can_" + compound.getString("material"), TextFormatting.DARK_GRAY)); // Display material tooltip
 			} else {
-				tooltip.add("§8Contains: " + WordUtils.capitalize(compound.getString("fluid").replace("_", " "))); // Else display fluid type and amount, while cleaning up string
-				tooltip.add("§8Remaining: " + compound.getShort("amount"));
+				tooltip.add("Contains: " + WordUtils.capitalize(compound.getString("fluid").replace("_", " "))); // Else display fluid type and amount, while cleaning up string
+				tooltip.add("Remaining: " + compound.getShort("amount"));
 			}
 		}
 	}

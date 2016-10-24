@@ -5,7 +5,7 @@
   "description": "Wonderful watering cans!",
   "version": "${version}",
   "mcversion": "${mcversion}",
-  "url": "http://wescook.ca/",
+  "url": "https://github.com/WesCook/WateringCans/",
   "updateUrl": "",
   "authorList": ["Wes Cook"],
   "credits": "Thanks to RWTema and ExtraUtilities for the original watering can.",
