@@ -146,7 +146,7 @@ public class ItemWateringCan extends Item {
 
 	// Add tooltips
 	@Override
-	public void addInformation(ItemStack stack, EntityPlayer player, List tooltip, boolean advanced) {
+	public void addInformation(ItemStack stack, EntityPlayer player, List<String> tooltip, boolean advanced) {
 		NBTTagCompound compound = stack.getTagCompound();
 		if (compound != null) {
 			if (compound.getShort("amount") == 0) { // If empty
