@@ -1,6 +1,5 @@
 package ca.wescook.wateringcans.items;
 
-import ca.wescook.wateringcans.WateringCans;
 import ca.wescook.wateringcans.particles.ParticleGrowthSolution;
 import ca.wescook.wateringcans.potions.ModPotions;
 import net.minecraft.block.Block;
