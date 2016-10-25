@@ -1,6 +1,8 @@
 package ca.wescook.wateringcans;
 
 import ca.wescook.wateringcans.proxy.CommonProxy;
+import com.google.common.collect.ImmutableMap;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -8,6 +10,9 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static ca.wescook.wateringcans.WateringCans.*;
 
@@ -21,9 +26,12 @@ public class WateringCans {
 
 	// Mod Constants
 	public static final String[] materials = new String[]{"stone", "iron", "gold", "obsidian"};
-	public static final String[] fluids = new String[]{"water", "growth_solution"};
 	public static final byte petalVariations = 9;
 	public static final short fluidCapacity = 500;
+	public static final Map<String, String> fluids = ImmutableMap.of( // Fluid IDs and their localization strings
+		"water", "tile.water.name",
+		"growth_solution", "fluid.growth_solution"
+	);
 
 	// Create instance of proxy
 	// This will vary depending on if the client or server is running

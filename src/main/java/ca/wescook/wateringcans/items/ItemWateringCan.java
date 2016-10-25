@@ -1,5 +1,6 @@
 package ca.wescook.wateringcans.items;
 
+import ca.wescook.wateringcans.WateringCans;
 import ca.wescook.wateringcans.particles.ParticleGrowthSolution;
 import ca.wescook.wateringcans.potions.ModPotions;
 import net.minecraft.block.Block;
@@ -28,7 +29,6 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.apache.commons.lang3.text.WordUtils;
 
 import java.util.List;
 
@@ -58,7 +58,7 @@ public class ItemWateringCan extends Item {
 
 				// Register filled variants
 				for (int i = 1; i < petalVariations; i++) { // Petal counts
-					for (String fluid : fluids) { // All fluids
+					for (String fluid : fluids.keySet()) { // All fluids
 						ModelBakery.registerItemVariants(this, new ModelResourceLocation(getRegistryName(), "currently_watering=" + wateringState + ",material=" + material + ",petals=" + fluid + "_" + i));
 					}
 				}
@@ -150,10 +150,11 @@ public class ItemWateringCan extends Item {
 		NBTTagCompound compound = stack.getTagCompound();
 		if (compound != null) {
 			if (compound.getShort("amount") == 0) { // If empty
-				tooltip.add(I18n.format("tooltip.watering_can_" + compound.getString("material"), TextFormatting.DARK_GRAY)); // Display material tooltip
+				tooltip.add(I18n.format("tooltip.wateringcans:watering_can_" + compound.getString("material"), TextFormatting.DARK_GRAY)); // Display material tooltip
 			} else {
-				tooltip.add("Contains: " + WordUtils.capitalize(compound.getString("fluid").replace("_", " "))); // Else display fluid type and amount, while cleaning up string
-				tooltip.add("Remaining: " + compound.getShort("amount"));
+				String fluid = compound.getString("fluid"); // Get fluid type
+				tooltip.add(I18n.format("tooltip.wateringcans:contains") + ": " + I18n.format(fluids.get(fluid))); // Get localization string of fluid and add to tooltip
+				tooltip.add(I18n.format("tooltip.wateringcans:remaining") + ": " + compound.getShort("amount"));
 			}
 		}
 	}

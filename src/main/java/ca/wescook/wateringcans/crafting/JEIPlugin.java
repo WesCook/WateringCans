@@ -19,7 +19,7 @@ public class JEIPlugin extends BlankModPlugin {
 
 		// Add description for growth solution bucket
 		ItemStack growthBucket = UniversalBucket.getFilledBucket(ForgeModContainer.getInstance().universalBucket, ModFluids.fluidGrowthSolution); // Create instance of growth solution bucket
-		registry.addDescription(growthBucket, "jei.watering_cans.growth_bucket"); // Create description page for it
+		registry.addDescription(growthBucket, "jei.wateringcans:growth_bucket"); // Create description page for it
 
 		// Add description for watering cans
 		for (String material : WateringCans.materials) {
@@ -27,7 +27,7 @@ public class JEIPlugin extends BlankModPlugin {
 			NBTTagCompound nbtCompound = ItemWateringCan.getDefaultNBT(); // Create compound from NBT defaults
 			nbtCompound.setString("material", material); // Overwrite material tag
 			tempItem.setTagCompound(nbtCompound); // Assign tag to ItemStack
-			registry.addDescription(tempItem, "jei.watering_cans.watering_can_" + material); // Create description page
+			registry.addDescription(tempItem, "jei.wateringcans:watering_can_" + material); // Create description page
 		}
 	}
 }
