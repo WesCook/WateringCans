@@ -1,5 +1,6 @@
 package ca.wescook.wateringcans.items;
 
+import ca.wescook.wateringcans.configs.Config;
 import ca.wescook.wateringcans.particles.ParticleGrowthSolution;
 import ca.wescook.wateringcans.potions.ModPotions;
 import net.minecraft.block.Block;
@@ -271,12 +272,20 @@ public class ItemWateringCan extends Item {
 			int halfReach = (int) Math.floor(reach / 2);
 
 			// Calculate growth speed
-			float growthSpeed = 6; // Initial speed
-			if (nbtCompound.getString("fluid").equals("growth_solution")) // Fluid multiplier
-				growthSpeed *= 2.5;
-			if (nbtCompound.getString("material").equals("gold"))  // Gold can multiplier
-				growthSpeed *= 1.5;
-			growthSpeed = 30 - growthSpeed; // Lower is actually faster, so invert
+			float growthSpeed;
+
+			if (Config.growthMultiplier != 0.0F) { // Avoid dividing by zero
+				growthSpeed = 6; // Initial speed
+				if (nbtCompound.getString("fluid").equals("growth_solution")) // Fluid multiplier
+					growthSpeed *= 2.5F;
+				if (nbtCompound.getString("material").equals("gold"))  // Gold can multiplier
+					growthSpeed *= 1.5F;
+				growthSpeed = 30F - growthSpeed; // Lower is actually faster, so invert
+				growthSpeed = (float) Math.ceil(growthSpeed / Config.growthMultiplier); // Divide by config setting (0-10) as multiplier
+			}
+			else {
+				growthSpeed = 0.0F;
+			}
 
 			// Put out entity fires
 			List<EntityLivingBase> affectedMobs = worldIn.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(rayTraceBlockPos.add(-halfReach, -1, -halfReach), rayTraceBlockPos.add(halfReach + 1, 2, halfReach + 1))); // Find mobs
