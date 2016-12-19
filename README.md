@@ -11,7 +11,7 @@ Watering cans will:
 * Speed up growth ticks (configurable rate)
 * Hydrate soil
 * Put out fires
-* Most importantly, spray water particles
+* Spray water particles
 
 ![Fires](screenshots/fires.png "Saving a friendly moo")
 

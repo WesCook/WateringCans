@@ -2,14 +2,14 @@
 {
   "modid": "wateringcans",
   "name": "Watering Cans",
-  "description": "Wonderful watering cans!",
+  "description": "Wonderful watering cans!  Adds 4 watering cans to help farm crops, or quickly put out fires.",
   "version": "${version}",
   "mcversion": "${mcversion}",
   "url": "https://github.com/WesCook/WateringCans/",
   "updateUrl": "",
   "authorList": ["Wes Cook"],
   "credits": "Thanks to RWTema and ExtraUtilities for the original watering can.",
-  "logoFile": "",
+  "logoFile": "/assets/wateringcans/textures/forge/logo.png",
   "screenshots": [],
   "dependencies": []
 }

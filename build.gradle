@@ -14,9 +14,9 @@ buildscript {
 apply plugin: 'net.minecraftforge.gradle.forge'
 compileJava.options.encoding = 'UTF-8'
 
-version = "1.0"
+version = "1.10.2-1.0.0"
 group = "ca.wescook.wateringcans"
-archivesBaseName = "wateringcans"
+archivesBaseName = "WateringCans"
 
 minecraft {
 	version = "1.10.2-12.18.3.2185"
