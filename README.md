@@ -11,7 +11,7 @@ Watering cans will:
 * Speed up growth ticks (configurable rate)
 * Hydrate soil
 * Put out fires
-* Spray water particles
+* Most importantly, spray water particles
 
 ![Fires](screenshots/fires.png "Saving a friendly moo")
 
@@ -27,5 +27,11 @@ Watering cans are tiered so there is no obvious "best" choice.
 ## Growth Solution
 
 Growth solution offers a 2.5x efficiency increase over regular water.  Crafted with a water bucket with bonemeal, it can be placed in the world to pick up with your watering can.
+
+## Changelog
+
+v1.0.0 - 2016-12-19
+
+* Initial release
 
 ![Friends](screenshots/friends.png "Now friends forever")

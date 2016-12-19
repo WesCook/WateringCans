@@ -14,7 +14,7 @@ import java.util.Map;
 
 import static ca.wescook.wateringcans.WateringCans.*;
 
-@Mod(modid = MODID, name = MODNAME, dependencies = DEPENDENCIES, useMetadata = true)
+@Mod(modid = MODID, name = MODNAME, version = "@VERSION@", dependencies = DEPENDENCIES, useMetadata = true)
 public class WateringCans {
 	// Mod Info
 	public static final String MODID = "wateringcans";

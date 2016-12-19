@@ -9,7 +9,7 @@
   "updateUrl": "",
   "authorList": ["Wes Cook"],
   "credits": "Thanks to RWTema and ExtraUtilities for the original watering can.",
-  "logoFile": "/assets/wateringcans/textures/forge/logo.png",
+  "logoFile": "assets/wateringcans/textures/forge/logo.png",
   "screenshots": [],
   "dependencies": []
 }
