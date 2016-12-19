@@ -1,6 +1,6 @@
-# Watering Cans
+![Logo](screenshots/logo.png "Watering Cans")
 
-Wonderful watering cans!  Help farm crops or fight fires.
+Wonderful watering cans!  Adds 4 watering cans to help farm crops, or quickly put out fires.
 
 Idea originally from Extra Utilities, now implemented as a standalone mod.
 
@@ -8,10 +8,12 @@ Idea originally from Extra Utilities, now implemented as a standalone mod.
 
 Watering cans will:
 
-* Speed up growth ticks
+* Speed up growth ticks (configurable rate)
 * Hydrate soil
 * Put out fires
-* Spray water particles
+* Most importantly, spray water particles
+
+![Fires](screenshots/fires.png "Saving a friendly moo")
 
 ## Materials
 
@@ -25,3 +27,5 @@ Watering cans are tiered so there is no obvious "best" choice.
 ## Growth Solution
 
 Growth solution offers a 2.5x efficiency increase over regular water.  Crafted with a water bucket with bonemeal, it can be placed in the world to pick up with your watering can.
+
+![Friends](screenshots/friends.png "Now friends forever")
