@@ -4,6 +4,8 @@ Wonderful watering cans!  Adds 4 watering cans to help farm crops, or quickly pu
 
 Idea originally from Extra Utilities, now implemented as a standalone mod.
 
+[See releases tab for downloads](https://github.com/WesCook/WateringCans/releases)
+
 ## Features
 
 Watering cans will:
@@ -30,7 +32,7 @@ Growth solution offers a 2.5x efficiency increase over regular water.  Crafted w
 
 ## Changelog
 
-v1.0.0 - 2016-12-20
+[v1.0.0](https://github.com/WesCook/WateringCans/releases/tag/v1.0.0) - 2016-12-20
 
 * Initial release
 
