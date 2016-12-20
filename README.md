@@ -30,7 +30,7 @@ Growth solution offers a 2.5x efficiency increase over regular water.  Crafted w
 
 ## Changelog
 
-v1.0.0 - 2016-12-19
+v1.0.0 - 2016-12-20
 
 * Initial release
 
