@@ -81,7 +81,7 @@ public class ItemWateringCan extends Item {
 					byte petals = countPetals(itemStackIn);
 
 					// Is player using watering can
-					EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+					EntityPlayer player = Minecraft.getMinecraft().player;
 					String currentlyWatering = "false";
 					if (player.getActivePotionEffect(ModPotions.usingWateringCan) != null)
 						currentlyWatering = "true";
@@ -106,7 +106,7 @@ public class ItemWateringCan extends Item {
 
 	// Add creative menu variants
 	@SideOnly(Side.CLIENT)
-	public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> list) {
+	public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list) {
 		for (String material : materials) { // Loop through materials
 			ItemStack tempItem = new ItemStack(itemIn); // Create ItemStack
 			NBTTagCompound nbtCompound = getDefaultNBT(); // Create compound from NBT defaults
@@ -162,7 +162,7 @@ public class ItemWateringCan extends Item {
 
 	// On right click
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
 		// List of valid fluid blocks
 		String[] validBlocks = new String[]{"water", MODID + ":growth_solution_block"};
 
@@ -170,10 +170,11 @@ public class ItemWateringCan extends Item {
 		RayTraceResult rayTraceResult = this.rayTrace(worldIn, playerIn, true);
 
 		// Check for/create NBT tag
-		NBTTagCompound nbtCompound = itemStackIn.getTagCompound(); // Check if exists
+		ItemStack itemstack = playerIn.getHeldItem(handIn);
+		NBTTagCompound nbtCompound = itemstack.getTagCompound(); // Check if exists
 		if (nbtCompound == null) { // If not
 			nbtCompound = new NBTTagCompound(); // Create new compound
-			itemStackIn.setTagCompound(nbtCompound); // Attach to itemstack
+			itemstack.setTagCompound(nbtCompound); // Attach to itemstack
 		}
 
 		// If sky, ignore
@@ -194,10 +195,10 @@ public class ItemWateringCan extends Item {
 				if (asList(validBlocks).contains(blockName))
 					refillWateringCan(worldIn, playerIn, nbtCompound, blockName, blockPos);
 				else // Water that block
-					commenceWatering(worldIn, playerIn, itemStackIn, nbtCompound, rayTraceVector, blockPos);
+					commenceWatering(worldIn, playerIn, itemstack, nbtCompound, rayTraceVector, blockPos);
 			}
 		}
-		return new ActionResult<ItemStack>(EnumActionResult.PASS, itemStackIn); // PASS instead of SUCCESS so we can dual wield watering cans
+		return new ActionResult<ItemStack>(EnumActionResult.PASS, itemstack); // PASS instead of SUCCESS so we can dual wield watering cans
 	}
 
 	private void refillWateringCan(World worldIn, EntityPlayer playerIn, NBTTagCompound nbtCompound, String blockName, BlockPos blockPos) {
@@ -337,7 +338,7 @@ public class ItemWateringCan extends Item {
 						slot = handSlot; // It's in the offhand
 				}
 
-				playerIn.inventory.setInventorySlotContents(slot, null); // Delete item
+				playerIn.inventory.setInventorySlotContents(slot, ItemStack.EMPTY); // Delete item
 				worldIn.playSound(playerIn, playerIn.posX, playerIn.posY, playerIn.posZ, SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.PLAYERS, 1.0F, 1.0F); // Tool break sound
 			}
 		}

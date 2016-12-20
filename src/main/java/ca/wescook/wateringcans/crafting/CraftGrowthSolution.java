@@ -5,11 +5,10 @@ import net.minecraft.init.Items;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeModContainer;
 import net.minecraftforge.fluids.UniversalBucket;
-
-import javax.annotation.Nullable;
 
 class CraftGrowthSolution implements IRecipe {
 
@@ -21,10 +20,9 @@ class CraftGrowthSolution implements IRecipe {
 		boolean somethingElseFound = false;
 
 		// Iterate through number of slots in crafting grid
-		for (int i=0; i<craftMatrix.getSizeInventory(); i++)
-		{
+		for (int i=0; i<craftMatrix.getSizeInventory(); i++) {
 			ItemStack item = craftMatrix.getStackInSlot(i); // Get current item
-			if (item != null) {
+			if (!item.isEmpty()) {
 				// Verify only one stack of each item
 				if (item.getItem() == Items.WATER_BUCKET) // Water
 					waterFound += 1;
@@ -39,10 +37,8 @@ class CraftGrowthSolution implements IRecipe {
 		return (waterFound == 1 && bonemealFound == 1 && !somethingElseFound);
 	}
 
-	@Nullable
 	@Override
 	public ItemStack getCraftingResult(InventoryCrafting craftMatrix) {
-		ItemStack growthBucket = UniversalBucket.getFilledBucket(ForgeModContainer.getInstance().universalBucket, ModFluids.fluidGrowthSolution);
 		return UniversalBucket.getFilledBucket(ForgeModContainer.getInstance().universalBucket, ModFluids.fluidGrowthSolution);
 	}
 
@@ -51,15 +47,17 @@ class CraftGrowthSolution implements IRecipe {
 		return 0;
 	}
 
-	@Nullable
 	@Override
 	public ItemStack getRecipeOutput() {
-		return null;
+		return ItemStack.EMPTY;
 	}
 
 	@Override
-	public ItemStack[] getRemainingItems(InventoryCrafting craftMatrix) {
-		// Clear crafting grid
-		return new ItemStack[craftMatrix.getSizeInventory()];
+	public NonNullList<ItemStack> getRemainingItems(InventoryCrafting craftMatrix) {
+		// Clear item inputs
+		NonNullList<ItemStack> slots = NonNullList.create();
+		for (int i=0; i<craftMatrix.getSizeInventory(); i++)
+			slots.add(ItemStack.EMPTY);
+		return slots;
 	}
 }

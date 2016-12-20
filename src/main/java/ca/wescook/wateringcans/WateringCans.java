@@ -19,7 +19,7 @@ public class WateringCans {
 	// Mod Info
 	public static final String MODID = "wateringcans";
 	public static final String MODNAME = "Watering Cans";
-	public static final String DEPENDENCIES = "after:JEI@[3.7.2.220,)"; // [] Inclusive, () Exclusive
+	public static final String DEPENDENCIES = "after:jei@[3.7.2.220,)"; // [] Inclusive, () Exclusive
 
 	// Mod Constants
 	public static final String[] materials = new String[]{"stone", "iron", "gold", "obsidian"};

@@ -29,7 +29,7 @@ archivesBaseName = "WateringCans"
 minecraft {
 	version = config.minecraft_version + "-" + config.forge_version
 	runDir = "run"
-	mappings = "snapshot_20160518"
+	mappings = config.mappings
 
 	// Replace @VERSION@ in WateringCans.java with mod version from build.properties
 	replace '@VERSION@', config.mod_version
