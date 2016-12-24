@@ -42,7 +42,6 @@ class CraftGrowthSolution implements IRecipe {
 	@Nullable
 	@Override
 	public ItemStack getCraftingResult(InventoryCrafting craftMatrix) {
-		ItemStack growthBucket = UniversalBucket.getFilledBucket(ForgeModContainer.getInstance().universalBucket, ModFluids.fluidGrowthSolution);
 		return UniversalBucket.getFilledBucket(ForgeModContainer.getInstance().universalBucket, ModFluids.fluidGrowthSolution);
 	}
 
