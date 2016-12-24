@@ -4,7 +4,7 @@ Wonderful watering cans!  Adds 4 watering cans to help farm crops, or quickly pu
 
 Idea originally from Extra Utilities, now implemented as a standalone mod.
 
-[See releases tab for downloads](https://github.com/WesCook/WateringCans/releases)
+[See releases tab for downloads.](https://github.com/WesCook/WateringCans/releases)
 
 ## Features
 
@@ -31,6 +31,11 @@ Watering cans are tiered so there is no obvious "best" choice.
 Growth solution offers a 2.5x efficiency increase over regular water.  Crafted with a water bucket with bonemeal, it can be placed in the world to pick up with your watering can.
 
 ## Changelog
+
+[v1.0.1](https://github.com/WesCook/WateringCans/releases/tag/v1.0.1) - 2016-12-24
+
+* Reducing harshness of outline on watering cans
+* Fixing bug where item did not reanimate when changing fluid types
 
 [v1.0.0](https://github.com/WesCook/WateringCans/releases/tag/v1.0.0) - 2016-12-20
 
