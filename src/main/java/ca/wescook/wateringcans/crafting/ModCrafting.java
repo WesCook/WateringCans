@@ -9,6 +9,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.oredict.ShapedOreRecipe;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,42 +35,42 @@ public class ModCrafting {
 
 		// Stone Watering Can
 		if (Config.enableWateringCans.get("stone")) {
-			GameRegistry.addShapedRecipe(wateringCanItem.get("stone"),
+			GameRegistry.addRecipe(new ShapedOreRecipe(wateringCanItem.get("stone"),
 				"T  ",
 				" FL",
 				" SS",
-				'T', Blocks.TRAPDOOR, 'F', Items.FLOWER_POT, 'L', Items.LEATHER, 'S', Blocks.COBBLESTONE
-			);
+				'T', Blocks.TRAPDOOR, 'F', Items.FLOWER_POT, 'L', "leather", 'S', "cobblestone"
+			));
 		}
 
 		// Iron Watering Can
 		if (Config.enableWateringCans.get("iron")) {
-			GameRegistry.addShapedRecipe(wateringCanItem.get("iron"),
+			GameRegistry.addRecipe(new ShapedOreRecipe(wateringCanItem.get("iron"),
 				"T  ",
 				" FL",
 				" II",
-				'T', Blocks.IRON_TRAPDOOR, 'F', Items.FLOWER_POT, 'L', Items.LEATHER, 'I', Items.IRON_INGOT
-			);
+				'T', Blocks.IRON_TRAPDOOR, 'F', Items.FLOWER_POT, 'L', "leather", 'I', "ingotIron"
+			));
 		}
 
 		// Gold Watering Can
 		if (Config.enableWateringCans.get("gold")) {
-			GameRegistry.addShapedRecipe(wateringCanItem.get("gold"),
+			GameRegistry.addRecipe(new ShapedOreRecipe(wateringCanItem.get("gold"),
 				"T  ",
 				" FL",
 				" GG",
-				'T', Blocks.IRON_TRAPDOOR, 'F', Items.FLOWER_POT, 'L', Items.LEATHER, 'G', Items.GOLD_INGOT
-			);
+				'T', Blocks.IRON_TRAPDOOR, 'F', Items.FLOWER_POT, 'L', "leather", 'G', "ingotGold"
+			));
 		}
 
 		// Obsidian Watering Can
 		if (Config.enableWateringCans.get("obsidian")) {
-			GameRegistry.addShapedRecipe(wateringCanItem.get("obsidian"),
+			GameRegistry.addRecipe(new ShapedOreRecipe(wateringCanItem.get("obsidian"),
 				"T  ",
 				" FL",
 				" OO",
-				'T', Blocks.IRON_TRAPDOOR, 'F', Items.FLOWER_POT, 'L', Items.LEATHER, 'O', Blocks.OBSIDIAN
-			);
+				'T', Blocks.IRON_TRAPDOOR, 'F', Items.FLOWER_POT, 'L', "leather", 'O', Blocks.OBSIDIAN
+			));
 		}
 
 		////////////////////////////
