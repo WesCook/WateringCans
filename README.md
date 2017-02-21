@@ -32,6 +32,10 @@ Growth solution offers a 2.5x efficiency increase over regular water.  Crafted w
 
 ## Changelog
 
+[v1.0.2](https://github.com/WesCook/WateringCans/releases/tag/v1.0.2) - 2017-02-21
+
+* Adding ore dictionary support to recipes
+
 [v1.0.1](https://github.com/WesCook/WateringCans/releases/tag/v1.0.1) - 2016-12-24
 
 * Reducing harshness of outline on watering cans
