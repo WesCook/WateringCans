@@ -3,12 +3,14 @@ item.wateringcans:watering_can_stone.name=Stone Watering Can
 item.wateringcans:watering_can_iron.name=Iron Watering Can
 item.wateringcans:watering_can_gold.name=Gold Watering Can
 item.wateringcans:watering_can_obsidian.name=Obsidian Watering Can
+item.wateringcans:watering_can_creative.name=Creative Watering Can
 
 # Tooltips
 tooltip.wateringcans:watering_can_stone=%sThe frugal option
 tooltip.wateringcans:watering_can_iron=%sJack of all trades
 tooltip.wateringcans:watering_can_gold=%sFaster hydration, once
 tooltip.wateringcans:watering_can_obsidian=%sHeavy duty
+tooltip.wateringcans:watering_can_creative=%sPower overwhelming
 tooltip.wateringcans:contains=Contains
 tooltip.wateringcans:remaining=Remaining
 
@@ -17,6 +19,7 @@ jei.wateringcans:watering_can_stone=While cheaper to make, this watering can onl
 jei.wateringcans:watering_can_iron=Dependable and rugged, but offering no special features.
 jei.wateringcans:watering_can_gold=The gold watering can has an automatic 1.5* multiplier to growth, but can only be filled once.
 jei.wateringcans:watering_can_obsidian=Though heavy and slow to use, its reach is increased to 5x5.
+jei.wateringcans:watering_can_creative=Offering 15x15 reach and maximum growth speed, this item is only available in creative mode.
 jei.wateringcans:growth_bucket=Crafted from a water bucket and bonemeal.\n\nCan be placed in the world and picked up with a watering can.
 
 # Fluids

@@ -237,15 +237,18 @@ public class ItemWateringCan extends Item {
 	}
 
 	private void commenceWatering(World worldIn, EntityPlayer playerIn, ItemStack itemStackIn, NBTTagCompound nbtCompound, Vec3d rayTraceVector, BlockPos rayTraceBlockPos) {
-		// If water remains in can
+		// Get info
+		String material = nbtCompound.getString("material");
+		String fluid = nbtCompound.getString("fluid");
 		short amountRemaining = nbtCompound.getShort("amount");
-		if (amountRemaining > 0) {
 
+		// If water remains in can
+		if (amountRemaining > 0) {
 			// Set player as currently watering (via potions because onItemUseFinish is too limiting)
 			playerIn.addPotionEffect(new PotionEffect(ModPotions.usingWateringCan, 6, 0, false, false)); // Set player to "using can"
 
 			// Slow player using obsidian can
-			if (nbtCompound.getString("material").equals("obsidian")) {
+			if (material.equals("obsidian")) {
 				playerIn.addPotionEffect(new PotionEffect(ModPotions.slowPlayer, 5, 5, false, false)); // Slow player
 				playerIn.addPotionEffect(new PotionEffect(ModPotions.inhibitFOV, 10, 0, false, false)); // Apply secondary, slightly longer potion effect to inhibit FOV changes from slowness
 			}
@@ -256,17 +259,19 @@ public class ItemWateringCan extends Item {
 			// Create water particles
 			if (worldIn.isRemote) { // Client only
 				for (int i = 0; i < 25; i++) {
-					if (nbtCompound.getString("fluid").equals("water"))
+					if (fluid.equals("water"))
 						worldIn.spawnParticle(EnumParticleTypes.WATER_SPLASH, rayTraceVector.xCoord + (worldIn.rand.nextGaussian() * 0.18D), rayTraceVector.yCoord, rayTraceVector.zCoord + (worldIn.rand.nextGaussian() * 0.18D), 0.0D, 0.0D, 0.0D);
-					else if (nbtCompound.getString("fluid").equals("growth_solution"))
+					else if (fluid.equals("growth_solution"))
 						ParticleGrowthSolution.spawn(worldIn, rayTraceVector.xCoord + (worldIn.rand.nextGaussian() * 0.18D), rayTraceVector.yCoord, rayTraceVector.zCoord + (worldIn.rand.nextGaussian() * 0.18D), 0.0D, 0.0D, 0.0D);
 				}
 			}
 
 			// Calculate watering can reach
 			int reach;
-			if (nbtCompound.getString("material").equals("obsidian"))
-				reach = 5; // If obsidian, increase reach
+			if (material.equals("obsidian"))
+				reach = 5;
+			else if (material.equals("creative"))
+				reach = 15;
 			else
 				reach = 3;
 
@@ -278,10 +283,12 @@ public class ItemWateringCan extends Item {
 
 			if (Config.growthMultiplier != 0.0F) { // Avoid dividing by zero
 				growthSpeed = 6; // Initial speed
-				if (nbtCompound.getString("fluid").equals("growth_solution")) // Fluid multiplier
+				if (fluid.equals("growth_solution")) // Fluid multiplier
 					growthSpeed *= 2.5F;
-				if (nbtCompound.getString("material").equals("gold"))  // Gold can multiplier
+				if (material.equals("gold"))  // Gold can multiplier
 					growthSpeed *= 1.5F;
+				if (material.equals("creative")) // Creative can multiplier
+					growthSpeed = 30F;
 				growthSpeed = 30F - growthSpeed; // Lower is actually faster, so invert
 				growthSpeed = (float) Math.ceil(growthSpeed / Config.growthMultiplier); // Divide by config setting (0-10) as multiplier
 			}
@@ -319,8 +326,8 @@ public class ItemWateringCan extends Item {
 			}
 
 			// Decrease fluid amount
-			if (amountRemaining > 0 && !playerIn.isCreative()) {
-				if (nbtCompound.getString("material").equals("stone")) // If stone
+			if (amountRemaining > 0 && !playerIn.isCreative() && !material.equals("creative")) {
+				if (material.equals("stone")) // If stone
 					nbtCompound.setShort("amount", (short) (amountRemaining - 2)); // Drain quicker (simulate smaller tank)
 				else
 					nbtCompound.setShort("amount", (short) (amountRemaining - 1));
@@ -328,8 +335,7 @@ public class ItemWateringCan extends Item {
 		}
 		else {
 			// If gold can is empty, destroy it
-			if (nbtCompound.getString("material").equals("gold") && nbtCompound.getBoolean("filledOnce")) {
-
+			if (material.equals("gold") && nbtCompound.getBoolean("filledOnce")) {
 				// Get slot of active watering can (hand or hotbar)
 				int slot = playerIn.inventory.getSlotFor(itemStackIn); // Get ID from itemstack (returns -1 in offhand)
 				final int handSlot = 40; // Offhand slot

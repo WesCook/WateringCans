@@ -27,7 +27,8 @@ public class Config {
 
 		// If watering cans are enabled
 		for (String material : WateringCans.materials) { // Get bool from config file, add to map
-			enableWateringCans.put(material, configFile.getBoolean("enableWateringCan" + WordUtils.capitalize(material), CATEGORY_GENERAL, true, "Allows crafting of the " + material + " watering can"));
+			if (!material.equals("creative"))
+				enableWateringCans.put(material, configFile.getBoolean("enableWateringCan" + WordUtils.capitalize(material), CATEGORY_GENERAL, true, "Allows crafting of the " + material + " watering can"));
 		}
 
 		// Update file
