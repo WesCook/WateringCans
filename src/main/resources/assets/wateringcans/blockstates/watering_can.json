@@ -8,7 +8,8 @@
 			"stone": { "textures": { "layer0": "wateringcans:items/watering_can_base_stone" } },
 			"iron": { "textures": { "layer0": "wateringcans:items/watering_can_base_iron" } },
 			"gold": { "textures": { "layer0": "wateringcans:items/watering_can_base_gold" } },
-			"obsidian": { "textures": { "layer0": "wateringcans:items/watering_can_base_obsidian" } }
+			"obsidian": { "textures": { "layer0": "wateringcans:items/watering_can_base_obsidian" } },
+			"creative": { "textures": { "layer0": "wateringcans:items/watering_can_base_creative" } }
 		},
 		"petals": {
 			"empty":  { "textures": { "layer1": "wateringcans:items/petals/watering_can_petal_empty" } },

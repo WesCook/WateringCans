@@ -22,7 +22,7 @@ public class WateringCans {
 	public static final String DEPENDENCIES = "after:JEI@[3.7.2.220,)"; // [] Inclusive, () Exclusive
 
 	// Mod Constants
-	public static final String[] materials = new String[]{"stone", "iron", "gold", "obsidian"};
+	public static final String[] materials = new String[]{"stone", "iron", "gold", "obsidian", "creative"};
 	public static final byte petalVariations = 9;
 	public static final short fluidCapacity = 500;
 	public static final Map<String, String> fluids = ImmutableMap.of( // Fluid IDs and their localization strings
