@@ -15,7 +15,7 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 compileJava.options.encoding = 'UTF-8'
 
 // Link properties file (variables now accessible as config.var)
-ext.configFile = file "build.properties"
+ext.configFile = file "gradle.properties"
 configFile.withReader {
 	def prop = new Properties()
 	prop.load(it)
@@ -31,7 +31,7 @@ minecraft {
 	runDir = "run"
 	mappings = config.mappings
 
-	// Replace @VERSION@ in WateringCans.java with mod version from build.properties
+	// Replace @VERSION@ in WateringCans.java with mod version from gradle.properties
 	replace '@VERSION@', config.mod_version
 	replaceIn 'WateringCans.java'
 }
