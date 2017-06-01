@@ -30,7 +30,7 @@ public class JEIPlugin extends BlankModPlugin {
 				return null;
 			}
 		};
-		subtypeRegistry.registerNbtInterpreter(ModItems.itemWateringCan, wateringCanInterpreter);
+		subtypeRegistry.registerSubtypeInterpreter(ModItems.itemWateringCan, wateringCanInterpreter);
 	}
 
 	@Override
