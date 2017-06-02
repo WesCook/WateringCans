@@ -3,12 +3,14 @@ item.wateringcans:watering_can_stone.name=Stein-Gießkanne
 item.wateringcans:watering_can_iron.name=Eisen-Gießkanne
 item.wateringcans:watering_can_gold.name=Gold-Gießkanne
 item.wateringcans:watering_can_obsidian.name=Obsidian-Gießkanne
+item.wateringcans:watering_can_creative.name=Kreativ-Gießkanne
 
 # Tooltips
 tooltip.wateringcans:watering_can_stone=%sDie sparsame Wahl
 tooltip.wateringcans:watering_can_iron=%sDer Alleskönner
 tooltip.wateringcans:watering_can_gold=%sSchnellere Bewässerung, einmalig
 tooltip.wateringcans:watering_can_obsidian=%sHochleistungsfähig
+tooltip.wateringcans:watering_can_creative=%sÜberwältigende Macht
 tooltip.wateringcans:contains=Enthält
 tooltip.wateringcans:remaining=Verbleibend
 
@@ -17,6 +19,7 @@ jei.wateringcans:watering_can_stone=Diese Gießkanne ist zwar günstiger herzust
 jei.wateringcans:watering_can_iron=Zuverlässig und robust, bietet aber keine Besonderheiten.
 jei.wateringcans:watering_can_gold=Die Gold-Gießkanne hat einen automatischen 1.5* Wachstums-Multiplikator, kann aber nur einmal gefüllt werden.
 jei.wateringcans:watering_can_obsidian=Obwohl nur schwer und langsam zu bedienen, wird die Reichweite auf 5x5 erhöht.
+jei.wateringcans:watering_can_creative=Mit einer 15x15-Reichweite und maximaler Wachstumsgeschwindigkeit ist dieser Gegenstand nur im Kreativ-Modus verfügbar.
 jei.wateringcans:growth_bucket=Herzustellen aus einem Wassereimer und Knochenmehl.\n\nKann in der Welt platziert und mit einer Gießkanne aufgenommen werden.
 
 # Fluids
