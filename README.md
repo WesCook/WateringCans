@@ -1,6 +1,6 @@
 ![Logo](screenshots/logo.png "Watering Cans")
 
-Wonderful watering cans!  Adds 4 watering cans to help farm crops, or quickly put out fires.
+Wonderful watering cans!  Adds new watering cans to help farm crops, or quickly put out fires.
 
 Idea originally from Extra Utilities, now implemented as a standalone mod.
 
