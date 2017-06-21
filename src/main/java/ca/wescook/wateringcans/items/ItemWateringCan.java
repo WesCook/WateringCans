@@ -305,19 +305,23 @@ public class ItemWateringCan extends Item {
 			for (int i=0; i<reach; i++) {
 				for (int j=0; j<reach; j++) {
 					for (int k=-1; k<2; k++) { // Go down one layer, up two layers
-
 						// Calculate new block position from reach and current Y level
 						BlockPos newBlockPos = rayTraceBlockPos.add(i - halfReach, k, j - halfReach);
 						Block newBlockObj = worldIn.getBlockState(newBlockPos).getBlock();
+						ResourceLocation blockResourceLocation = newBlockObj.getRegistryName();
+
+						// Ensure RL is valid
+						if (blockResourceLocation == null)
+							continue;
 
 						// Put out block fires
-						if (newBlockObj.getRegistryName().toString().equals("minecraft:fire")) { // If fire
+						if (blockResourceLocation.toString().equals("minecraft:fire")) { // If fire
 							worldIn.setBlockToAir(newBlockPos); // Remove it
 							worldIn.playSound(playerIn, playerIn.posX, playerIn.posY, playerIn.posZ, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.5F, 1.0F); // Fire extinguish sound
 						}
 
 						// Moisten soil/Tick Updates
-						if (newBlockObj.getRegistryName().toString().equals("minecraft:farmland")) // If farmland
+						if (blockResourceLocation.toString().equals("minecraft:farmland")) // If farmland
 							worldIn.setBlockState(newBlockPos, Blocks.FARMLAND.getDefaultState().withProperty(MOISTURE, 7)); // Moisten it
 						else // If not farmland, to avoid immediately untilling
 							worldIn.updateBlockTick(newBlockPos, newBlockObj, (int) growthSpeed, 0); // Do tick updates
