@@ -33,7 +33,12 @@ Growth solution offers a 2.5x efficiency increase over regular water.  Crafted w
 
 ## Changelog
 
-[v1.1.0](https://github.com/WesCook/WateringCans/releases/tag/v1.1.0) - 2017-07-02
+[v1.1.1](https://github.com/WesCook/WateringCans/releases/tag/v1.1.1) - 2017-06-21
+
+* Fixed ghost potion effects showing up when using the watering can
+* Fixed crash when watering unregistered blocks
+
+[v1.1.0](https://github.com/WesCook/WateringCans/releases/tag/v1.1.0) - 2017-06-02
 
 * Added creative watering can
 * Added German localizations (contribution from ACGaming)
