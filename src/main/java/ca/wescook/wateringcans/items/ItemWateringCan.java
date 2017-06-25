@@ -137,7 +137,7 @@ public class ItemWateringCan extends Item {
 
 			// If material, fluid type, and petal count match, don't reanimate
 			if (oldNBT != null && newNBT != null) { // NBT exists
-				if (oldNBT.getString("material").equals(newNBT.getString("material")) && oldNBT.getString("fluid") == newNBT.getString("fluid") && countPetals(oldStack) == countPetals(newStack))
+				if (oldNBT.getString("material").equals(newNBT.getString("material")) && oldNBT.getString("fluid").equals(newNBT.getString("fluid")) && countPetals(oldStack) == countPetals(newStack))
 					return false; // Only fluid amount changed, don't animate
 			}
 		}
