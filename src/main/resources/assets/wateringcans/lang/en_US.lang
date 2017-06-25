@@ -17,7 +17,7 @@ tooltip.wateringcans:remaining=Remaining
 # JEI Information
 jei.wateringcans:watering_can_stone=While cheaper to make, this watering can only has half the usual tank size.
 jei.wateringcans:watering_can_iron=Dependable and rugged, but offering no special features.
-jei.wateringcans:watering_can_gold=The gold watering can has an automatic 1.5* multiplier to growth, but can only be filled once.
+jei.wateringcans:watering_can_gold=The gold watering can has an automatic 2.5* multiplier to growth, but can only be filled once.
 jei.wateringcans:watering_can_obsidian=Though heavy and slow to use, its reach is increased to 5x5.
 jei.wateringcans:watering_can_creative=Offering 15x15 reach and maximum growth speed, this item is only available in creative mode.
 jei.wateringcans:growth_bucket=Crafted from a water bucket and bonemeal.\n\nCan be placed in the world and picked up with a watering can.

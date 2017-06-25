@@ -282,14 +282,14 @@ public class ItemWateringCan extends Item {
 			float growthSpeed;
 
 			if (Config.growthMultiplier != 0.0F) { // Avoid dividing by zero
-				growthSpeed = 6; // Initial speed
+				growthSpeed = 6F; // Initial speed
 				if (fluid.equals("growth_solution")) // Fluid multiplier
-					growthSpeed *= 2.5F;
+					growthSpeed *= 2F;
 				if (material.equals("gold"))  // Gold can multiplier
-					growthSpeed *= 1.5F;
+					growthSpeed *= 2.5F;
 				if (material.equals("creative")) // Creative can multiplier
 					growthSpeed = 30F;
-				growthSpeed = 30F - growthSpeed; // Lower is actually faster, so invert
+				growthSpeed = Math.max(0, 30F - growthSpeed); // Lower is actually faster, so invert
 				growthSpeed = (float) Math.ceil(growthSpeed / Config.growthMultiplier); // Divide by config setting (0-10) as multiplier
 			}
 			else {
