@@ -33,6 +33,12 @@ Growth solution offers a 2x efficiency increase over regular water.  Crafted wit
 
 ## Changelog
 
+[v1.1.2](https://github.com/WesCook/WateringCans/releases/tag/v1.1.1) - 2017-06-24
+
+* Buffed golden watering can
+* Slightly nerfed growth solution
+* Fixed watering can firing re-equip animation too often on servers
+
 [v1.1.1](https://github.com/WesCook/WateringCans/releases/tag/v1.1.1) - 2017-06-21
 
 * Fixed ghost potion effects showing up when using the watering can
