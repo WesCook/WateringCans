@@ -29,7 +29,7 @@ Watering cans are tiered so there is no obvious "best" choice.
 
 ## Growth Solution
 
-Growth solution offers a 2x efficiency increase over regular water.  Crafted with a water bucket with bonemeal, it can be placed in the world to pick up with your watering can.
+Growth solution offers a 2x efficiency increase over regular water.  Crafted with a water bucket and bone meal, it can be placed in the world to pick up with your watering can.
 
 ## Changelog
 
